@@ -1,0 +1,50 @@
+.m-btn {
+  outline: none;
+  height: 40px;
+  font-size: 13px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.m-button-icon{
+  background-color: #019160;
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  outline: none;
+  height: 40px;
+  font-size: 13px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 4px;
+}
+.m-button-icon:hover{
+  background-color: #2FBE8E;
+}
+.m-btn-icon:focus{
+  background-color:#01B075;
+}
+.m-btn-icon { 
+  padding-right: 8px;
+}
+.infor-dialog-decor{
+  width: 50px;
+  height: 5px;
+  background-color: aquamarine;
+}
+.second-button {
+  background-color: #bbbbbb;
+}
+.second-button:hover {
+  background-color: #bbbbbb;
+}
+.primary-button{
+  background-color: #019160;
+}
+.primary-button:hover {
+  background-color: #2fbe8e;
+}
+.primary-button:focus,.second-button:focus {
+  background-color: #01b075;
+}

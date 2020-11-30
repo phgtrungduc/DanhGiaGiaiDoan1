@@ -27,12 +27,9 @@
 }
 .m-btn-icon { 
   padding-right: 8px;
+  
 }
-.infor-dialog-decor{
-  width: 50px;
-  height: 5px;
-  background-color: aquamarine;
-}
+
 .second-button {
   background-color: #bbbbbb;
 }

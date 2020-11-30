@@ -25,8 +25,8 @@ namespace MISA.CukCuk.Web.Controllers {
         /// createdBy:PTDuc(23/12/2020)
         [HttpGet]
         public IActionResult Get() {
-            var customers = _baseService.GetEntities();
-            return Ok(customers);
+            var entities = _baseService.GetEntities();
+            return Ok(entities);
         }
 
         // GET api/<CustomersController>/5
@@ -38,8 +38,8 @@ namespace MISA.CukCuk.Web.Controllers {
         /// <returns></returns>
         [HttpGet("{id}")]
         public IActionResult Get(Guid id) {
-            var customers = _baseService.GetEntityById(id);
-            return Ok(customers);
+            var entity = _baseService.GetEntityById(id);
+            return Ok(entity);
         }
 
         // POST api/<CustomersController>

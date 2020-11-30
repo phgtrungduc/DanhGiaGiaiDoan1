@@ -9,3 +9,14 @@ D:\MISA\Code\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.Appli
 D:\MISA\Code\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.pdb
 D:\MISA\Code\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.csproj.GenerateResource.cache
 D:\MISA\Code\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.Properties.Resources.resources
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\netcoreapp3.1\MISA.ApplicationCore.deps.json
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\netcoreapp3.1\MISA.ApplicationCore.dll
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\netcoreapp3.1\MISA.ApplicationCore.pdb
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.csprojAssemblyReference.cache
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.Properties.Resources.resources
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.csproj.GenerateResource.cache
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.AssemblyInfoInputs.cache
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.AssemblyInfo.cs
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.csproj.CoreCompileInputs.cache
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.dll
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\netcoreapp3.1\MISA.ApplicationCore.pdb

@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Text;
 
 namespace MISA.Infrastructure {
-    public class BaseRepository<TEntity>: IBaseRepository<TEntity> where TEntity:BaseEntity{
+    public class BaseRepository<TEntity>: IBaseRepository<TEntity>,IDisposable where TEntity:BaseEntity{
         protected string _tableName;
         #region DECLARE
         IConfiguration _configuration;
@@ -28,19 +28,37 @@ namespace MISA.Infrastructure {
         }
 
         public int Add(TEntity entity) {
-            DynamicParameters parameters = MappingDBType(entity);
-            //Thực thi 
-            var rows = _dbConnection.Execute($"Proc_Insert{_tableName}", parameters, commandType: CommandType.StoredProcedure);
-            //Trả lại số bản
+            var rows = 0;
+            _dbConnection.Open();
+            using (var transaction = _dbConnection.BeginTransaction()) {
+                try {
+                    DynamicParameters parameters = MappingDBType(entity);
+                    //Thực thi 
+                    rows = _dbConnection.Execute($"Proc_Insert{_tableName}", parameters, commandType: CommandType.StoredProcedure);
+                    //Trả lại số bản
+                    transaction.Commit();
+                }
+                catch (Exception) {
+                    transaction.Rollback();
+                }
+            }
             return rows;
         }
 
         public int Delete(Guid entityId) {
-            //using (_dbConnection.BeginTransaction()) {
-
-            //}
-            var rows = _dbConnection.Execute($"Proc_Insert{_tableName}", entityId, commandType: CommandType.StoredProcedure);
-            return 0;
+            var rows=0;
+            _dbConnection.Open();
+            using (var transaction = _dbConnection.BeginTransaction()) {
+                try {
+                    rows = _dbConnection.Execute($"DELETE FROM {_tableName} WHERE {_tableName}Id='{entityId}'", entityId, commandType: CommandType.Text);
+                    transaction.Commit();
+                }
+                catch (Exception) {
+                    transaction.Rollback();
+                }
+            }
+                
+            return rows;
         }
 
         public IEnumerable<TEntity> GetEntities() {
@@ -49,25 +67,30 @@ namespace MISA.Infrastructure {
             return entities;
         }
 
-        public TEntity GetEntityByCode(Guid entityCode) {
-            //Khởi tạo các commandtext, trả về thằng đầu tiên nếu có, nếu không trả về null
-            var entities = _dbConnection.Query<TEntity>($"SELECT * FROM {_tableName} WHERE CustomerCode='{entityCode}'", commandType: CommandType.Text).FirstOrDefault();//Chạy câu lệnh đầu query
-            //Trả về dữ liệu
-            return entities;
-        }
 
         public TEntity GetEntityById(Guid entityId) {
             //Khởi tạo các commandtext, trả về thằng đầu tiên nếu có, nếu không trả về null
-            var entities = _dbConnection.Query<TEntity>($"SELECT * FROM {_tableName} WHERE CustomerCode='{entityId}'", commandType: CommandType.Text).FirstOrDefault();//Chạy câu lệnh đầu query
+            var entities = _dbConnection.Query<TEntity>($"SELECT * FROM {_tableName} WHERE {_tableName}Id='{entityId}'", commandType: CommandType.Text).FirstOrDefault();//Chạy câu lệnh đầu query
             //Trả về dữ liệu
             return entities;
         }
 
         public int Update(TEntity entity) {
-            // Khởi tạo kết nối với Db:
-            var parameters = MappingDBType(entity);
-            // Thực thi commandText:
-            var rowAffects = _dbConnection.Execute($"Proc_Update{_tableName}", parameters, commandType: CommandType.StoredProcedure);
+            var rowAffects = 0;
+            _dbConnection.Open();
+            using (var transaction = _dbConnection.BeginTransaction()) {
+                try {
+                    var parameters = MappingDBType(entity);
+                    // Thực thi commandText:
+                    rowAffects = _dbConnection.Execute($"Proc_Update{_tableName}", parameters, commandType: CommandType.StoredProcedure);
+                    transaction.Commit();
+                }
+                catch (Exception) {
+
+                    transaction.Rollback() ;
+                }
+            }
+                
             // Trả về kết quả (số bản ghi thêm mới được)
             return rowAffects;
         }
@@ -124,6 +147,13 @@ namespace MISA.Infrastructure {
                 return null;
             var entityReturn = _dbConnection.Query<TEntity>(query, commandType: CommandType.Text).FirstOrDefault();
             return entityReturn;
+        }
+
+        public void Dispose() {
+            if (_dbConnection.State == ConnectionState.Open) {
+                _dbConnection.Close();
+            }
+
         }
     }
 }

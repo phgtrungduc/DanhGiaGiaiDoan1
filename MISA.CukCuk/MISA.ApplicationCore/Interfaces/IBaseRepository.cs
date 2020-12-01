@@ -10,7 +10,6 @@ namespace MISA.ApplicationCore.interfaces {
         int Add(TEntity entity);
         int Update(TEntity entity);
         int Delete(Guid entityId);
-        TEntity GetEntityByCode(Guid entityCode);
         /// <summary>
         /// 
         /// </summary>

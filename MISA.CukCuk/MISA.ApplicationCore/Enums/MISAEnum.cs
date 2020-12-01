@@ -18,7 +18,11 @@ namespace MISA.ApplicationCore.Enums {
         /// <summary>
         /// Trạng thái thành công
         /// </summary>
-        Success = 200
+        Success = 200,
+        /// <summary>
+        /// Exception từ request người dùng gửi lên
+        /// </summary>
+        Exception = 500
 
     }
     /// <summary>

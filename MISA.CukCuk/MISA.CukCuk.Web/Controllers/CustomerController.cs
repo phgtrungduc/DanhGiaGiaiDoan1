@@ -15,9 +15,9 @@ using MISA.ApplicationCore.Enums;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MISA.CukCuk.Web.Controllers {
-    public class CustomersController : BaseEntityController<Customer> {
+    public class CustomerController : BaseEntityController<Customer> {
         ICustomerService _customerService;
-        public CustomersController(ICustomerService customerService):base(customerService) {
+        public CustomerController(ICustomerService customerService):base(customerService) {
             _customerService = customerService;
         }
     }

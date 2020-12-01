@@ -9,12 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.Infrastructure", "MISA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.CukCuk.Web", "MISA.CukCuk.Web\MISA.CukCuk.Web.csproj", "{09B297E3-8768-475F-860B-5ED4877B427B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{37AA57CA-45A6-4767-A923-D3391A80AB67}"
-	ProjectSection(SolutionItems) = preProject
-		MISA.ApplicationCore\Properties\Resources.Designer.cs = MISA.ApplicationCore\Properties\Resources.Designer.cs
-		MISA.ApplicationCore\Properties\Resources.resx = MISA.ApplicationCore\Properties\Resources.resx
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

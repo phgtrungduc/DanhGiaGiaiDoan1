@@ -63,9 +63,9 @@ namespace MISA.ApplicationCore.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Update thành công.
         /// </summary>
-        public static string UpdateSuccess {
+        public static string Msg_UpdateSuccess {
             get {
-                return ResourceManager.GetString("UpdateSuccess", resourceCulture);
+                return ResourceManager.GetString("Msg_UpdateSuccess", resourceCulture);
             }
         }
     }

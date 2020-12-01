@@ -1,0 +1,9 @@
+.m-radio-group {
+  display: flex;
+  height: 40px;
+}
+
+.m-radio-group .m-radio-item {
+  display: flex;
+  align-items: center;
+}

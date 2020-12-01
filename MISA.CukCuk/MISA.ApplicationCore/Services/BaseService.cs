@@ -51,7 +51,7 @@ namespace MISA.ApplicationCore {
             entity.EntityState = Enums.EntityState.Update;
             var isValidate = Validate(entity);
             if (isValidate == true) {
-                _serviceResult.Messenger = "Update thành công";
+                _serviceResult.Messenger = Properties.Resources.Msg_UpdateSuccess;
                 _serviceResult.Data = _baseRepository.Update(entity);
                 _serviceResult.MISACode = Enums.MISACode.IsValid;
                 return _serviceResult;

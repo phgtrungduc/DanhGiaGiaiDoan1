@@ -46,7 +46,7 @@ class BaseJS {
     //Kiểm tra email đúng định dạng khi out focus khỏi input
     this.checkEmail();
   }
-  
+
   /**
    * Hiển thị thông báo
    * @param {string} content : Nội dung thông báo
@@ -282,7 +282,7 @@ class BaseJS {
               // + đưa ra thông báo thành công
               self.showNotification("Thêm khách hàng thành công", "success");
             }
-            
+
             // + load lại lại dữ liệu
             self.loadData();
           })
@@ -311,7 +311,7 @@ class BaseJS {
       if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
       $(".include-content").show();
       //Lấy id của bản ghi
-      let id = $(this).data("CustomerId");
+      let id = $(this).data("EmployeeId");
       //gọi api lấy dữ liệu bản ghi
       $.ajax({
         type: "GET",
@@ -321,20 +321,13 @@ class BaseJS {
           self.CustomerId = res.CustomerId;
           //lấy tất cả các input từ form HTML
           var allInputField = $("[inputField]");
-
           $.each(allInputField, function (index, input) {
             //Riêng với trường hợp radio sẽ tách xử lí riêng
             if ($(input).attr("type") == "radio") {
               //Các trường nào quyết định sẽ hiển thị theo kiểu radio sẽ handle bên trong này
               //Trong trường hợp này chỉ có Gender muốn hiển thị theo kiểu radio nên chỉ bắt sự kiện
               //inputField là Gender
-              if ($(input).attr("inputField") === "Gender") {
-                if (parseInt($(input).attr("genderValue")) === res["Gender"]) {
-                  $(input).attr("checked", true);
-                } else {
-                  $(input).attr("checked", false);
-                }
-              }
+
             } else if ($(input).attr("type") == "date") {
               //Với các trường kiểu date tách xử lí riêng, chỉ có date of birth nên handle ngay không cần kiểm tra tên trường nữa :))
               let inputField = $(input).attr("inputField");
@@ -347,7 +340,16 @@ class BaseJS {
                 if (month + 1 < 10) month = "0" + (month + 1);
                 $(input).val(year + "-" + month + "-" + date);
               }
-            } else {
+            }
+            else if ($(input).attr("type") === "select") {
+              let inputField = $(input).attr("inputField");
+              let allOptions = $(this).find("option");
+              $.each(allOptions, function (index, value) { 
+                 console.log(value.attr(`${inputField}Value`));
+              });
+              debugger
+            }
+            else {
               let inputField = $(input).attr("inputField");
               $(input).val(res[inputField]);
             }
@@ -391,7 +393,7 @@ class BaseJS {
       }
     });
   }
-  
+
 
   /**
    * Đưa ngày tháng ra theo định dạng
@@ -446,36 +448,27 @@ class BaseJS {
       }).done((res) => {
         $.each(res, function (index, value) {
           let tr = $("<tr></tr>");
-          $(tr).data("CustomerId", value.CustomerId);
+          $(tr).data("EmployeeId", value.EmployeeId);
           $.each(ths, (ind, val) => {
             var fieldName = $(val).attr("fieldName");
 
             //cột đầu tiên của mỗi row trên table sẽ dùng để hiển thị 1 cái thùng rác nhằm mục đích ấn vào để xóa dữ liệu
             //trên dòng tương ứng
-            if (fieldName != "garbage") {
-              var typeFormat = $(val).attr("formatType");
+            var typeFormat = $(val).attr("formatType");
 
-              var data = value[fieldName];
-              if (data) {
-                if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
-                  data = self.formatDate(data, typeFormat);
-                } else if (typeFormat === "money") {
-                  data = self.formatMoney(data);
-                }
-              } else {
-                data = "";
+            var data = value[fieldName];
+            if (data) {
+              if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
+                data = self.formatDate(data, typeFormat);
+              } else if (typeFormat === "money") {
+                data = self.formatMoney(data);
               }
-              var td = `<td class="alight-left-table">${data}</td>`;
-              $(tr).append(td);
             } else {
-              let td = $("<td></td>");
-              let garbage = $("<i class='far fa-trash-alt' title='Ấn vào để xóa dòng này'></i>");
-              //gán id của mỗi bản ghi vào thùng rác để phục vụ lấy ra khi ấn thùng rác xóa
-              $(garbage).data("CustomerId", value.CustomerId);
-              $(td).append(garbage);
-              $(tr).append(td);
+              data = "";
             }
-
+            var td = `<td class="alight-left-table">${data}</td>`;
+            $(tr).append(td);
+            $(".table-content").first().append(tr);
             $(".table-content").first().append(tr);
           });
 

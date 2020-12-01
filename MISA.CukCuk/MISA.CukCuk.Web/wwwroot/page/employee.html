@@ -160,13 +160,13 @@
                                 <th fieldName="EmployeeCode" class="text-align-left">Mã nhân viên</th>
                                 <th fieldName="FullName" class="text-align-left">Họ và tên</th>
                                 <th fieldName="Gender" class="text-align-left">Giới tính</th>
-                                <th fieldName="JoinDate" typeFormat="ddmmyyyy" class="text-align-center">Ngày sinh</th>
-                                <th fieldName="PositionName" class="text-align-left">Điện thoại</th>
-                                <th fieldName="DepartmentName" class="text-align-left">Email</th>
-                                <th fieldName="Email" class="text-align-left">Chức vụ</th>
-                                <th fieldName="PhoneNumber" class="text-align-left">Phòng ban</th>
-                                <th fieldName="Address" class="text-align-right">Mức lương cơ bản</th>
-                                <th fieldName="WorkStatusName" class="text-align-left">Tình trạng công việc</th>
+                                <th fieldName="DateOfBirth" typeFormat="ddmmyyyy" class="text-align-center">Ngày sinh</th>
+                                <th fieldName="PhoneNumber" class="text-align-left">Điện thoại</th>
+                                <th fieldName="Email" class="text-align-left">Email</th>
+                                <th fieldName="PositionId" class="text-align-left">Chức vụ</th>
+                                <th fieldName="DepartmentId" class="text-align-left">Phòng ban</th>
+                                <th fieldName="Salary" class="text-align-right">Mức lương cơ bản</th>
+                                <th fieldName="WorkStatus" class="text-align-left">Tình trạng công việc</th>
                             </thead>
 
                             <tbody class="table-content body-table">
@@ -247,7 +247,7 @@
                                 <div class="m-col m-flex-1">
                                     <div class="m-label">Mã nhân viên (<span style="color:red;">*</span>)</div>
                                     <div class="m-control"><input id="txtCustomerCode" required type="text"
-                                            inputField="CustomerCode" /></div>
+                                            inputField="EmployeeCode" /></div>
                                 </div>
                                 <div class="m-flex-1 mg-left-10px">
                                     <div class="m-label">Họ và tên (<span style="color:red;">*</span>)</div>
@@ -263,16 +263,17 @@
                                             inputField="DateOfBirth" /></div>
                                 </div>
                                 <div class="m-flex-1">
+                                    <!-- Giới tính(0 - Nữ; 1 - Nam; 2 - Khác) -->
                                     <div class="m-label">Giới tính</div>
                                     <select id="slGender" type="select" class="m-control" inputField="Gender">
-                                        <option id="optMale" value="0" name="gender" inputField="Gender">
-                                            Nam
-                                        </option>
-                                        <option id="optFeMale" value="1" name="gender" inputField="Gender" selected>
+                                        <option id="optMale" GenderValue="0" name="gender" >
                                             Nữ
                                         </option>
-                                        <option id="optOther" value="2" name="gender" inputField="Gender">
-                                            Không xác định
+                                        <option id="optFeMale" GenderValue="1" name="gender"  >
+                                            Nam
+                                        </option>
+                                        <option id="optOther" GenderValue="2" name="gender" >
+                                            Khác
                                         </option>
                                     </select>
                                 </div>
@@ -311,8 +312,8 @@
                                 <div class="m-flex-1 mg-left-10px">
                                     <div class="m-label">Số điện thoại (<span style="color:red;">*</span>)</div>
                                     <div class="m-control">
-                                        <input id="txtFullName" class="input-required" type="text" required
-                                            inputField="FullName" />
+                                        <input id="txtPhoneNumber" class="input-required" type="text" required
+                                            inputField="PhoneNumber" />
                                     </div>
                                 </div>
                             </div>

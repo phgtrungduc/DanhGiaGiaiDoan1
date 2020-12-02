@@ -323,19 +323,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ptduc\\.nuget\\packages\\": {}
+    "C:\\Users\\duc.pt173030\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ptduc\\Desktop\\New folder\\DanhGiaGiaiDoan1\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "projectUniqueName": "D:\\MISA\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
       "projectName": "MISA.ApplicationCore",
-      "projectPath": "C:\\Users\\ptduc\\Desktop\\New folder\\DanhGiaGiaiDoan1\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
-      "packagesPath": "C:\\Users\\ptduc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ptduc\\Desktop\\New folder\\DanhGiaGiaiDoan1\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
+      "projectPath": "D:\\MISA\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "packagesPath": "C:\\Users\\duc.pt173030\\.nuget\\packages\\",
+      "outputPath": "D:\\MISA\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ptduc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\duc.pt173030\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -347,6 +347,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -358,6 +359,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Dapper": {
             "target": "Package",
@@ -387,7 +389,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

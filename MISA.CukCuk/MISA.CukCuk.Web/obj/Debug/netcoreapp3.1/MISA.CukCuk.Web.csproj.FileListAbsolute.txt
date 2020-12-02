@@ -128,3 +128,7 @@ C:\Users\ptduc\Desktop\New folder\DanhGiaGiaiDoan1\MISA.CukCuk\MISA.CukCuk.Web\b
 C:\Users\ptduc\Desktop\New folder\DanhGiaGiaiDoan1\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\ptduc\Desktop\New folder\DanhGiaGiaiDoan1\MISA.CukCuk\MISA.CukCuk.Web\obj\Debug\netcoreapp3.1\MISA.CukCuk.Web.csproj.CoreCompileInputs.cache
 C:\Users\ptduc\Desktop\New folder\DanhGiaGiaiDoan1\MISA.CukCuk\MISA.CukCuk.Web\obj\Debug\netcoreapp3.1\MISA.CukCuk.Web.MvcApplicationPartsAssemblyInfo.cache
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\MISA\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll

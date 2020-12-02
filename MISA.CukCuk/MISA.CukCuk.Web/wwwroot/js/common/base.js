@@ -6,7 +6,7 @@ class BaseJS {
   }
 
   /**
-   * Thêm các sự kiện xử lí 
+   * Thêm các sự kiện xử lí
    *Created by: PTDuc(xx/11/2020)
    *Edited by: PTDuc(20/11/2020)
    */
@@ -16,6 +16,7 @@ class BaseJS {
     $(".sync-m-btn").click(function () {
       self.loadData;
     });
+    this.renderComboBox();
     //Ấn nút hủy trên thông báo xóa entity
     this.cancleDelete();
 
@@ -26,7 +27,7 @@ class BaseJS {
     this.deleteRow();
 
     //Hiển thị thùng rác ở mỗi row trên table -> ấn vào thùng rác thực hiện xóa dữ liệu entity ứng với row
-    this.hoverRowTable();
+    this.clickRowTable();
 
     // Sự kiện ấn nút thêm entity (customers,employees,...)
     this.addEntity();
@@ -85,30 +86,26 @@ class BaseJS {
     return false;
   }
   /**
+   * Sự kiện khi click vào dòng cần xóa, hiển thị thùng rác trên đầu
+   * Created by: PTDuc(18/11/2020)
+   */
+  clickRowTable() {
+    let garbage = $("#btnDelete");
+    let self = this;
+    $("table tbody").on("click", "tr", function () {
+      $(garbage).show();
+      self.deleteLink = $(this).data("EmployeeId");
+    });
+  }
+  /**
    * Sự kiện khi ấn vào thùng rác, yêu cầu xóa dữ liệu của môt dòng- > hiển thị thông báo xác nhận xóa
    * Created by: PTDuc(18/11/2020)
    */
   deleteRow() {
     let self = this;
-    // $("table tbody").on("click", ".fa-trash-alt", function () {
-    //   self.deleteLink = $(this).data("CustomerId");
-    //   $(".alert-delete").show();
-    // });
-  }
-
-  /**
-   * Sự kiện hiển thị và ẩn đi icon thùng rác thể hiện xóa dữ liệu của một dòng
-   * Created by: PTDuc(18/11/2020)
-   */
-  hoverRowTable() {
-    //Thùng rác mặc định sẽ bị ẩn đi, khi hover qua mỗi dòng thì thùng rác hiện ở phần đầu của dòng đó
-    // $("table tbody").on("mouseover", "tr", function () {
-    //   let gabarge = $(this).find(".fa-trash-alt");
-    //   $(gabarge).show();
-    // });
-    //Khi out hover khỏi dòng thùng rác sẽ lại ẩn đi
-    $("table tbody").on("mouseout", "tr", function () {
-      // $(this).find(".fa-trash-alt").hide();
+    $("#btnDelete").click(function (e) {
+      console.log(self.deleteLink);
+      $(".alert-delete").show();
     });
   }
 
@@ -120,6 +117,7 @@ class BaseJS {
     this.deleteLink = "";
     $("body").on("click", ".btn-cancle-alert,#btnCancleDelete", function () {
       $(".alert-delete").hide();
+      $("#btnDelete").hide();
     });
   }
 
@@ -131,6 +129,7 @@ class BaseJS {
     let self = this;
     //Gửi api yêu cầu xóa dữ liệu
     $("body").on("click", "#btnConfirmDelete", function () {
+      $(".loading").show();
       $.ajax({
         url: self.host + self.router + "/" + self.deleteLink,
         method: "DELETE",
@@ -143,11 +142,14 @@ class BaseJS {
           self.deleteLink = "";
           //Load lại dữ liệu trên trang chủ
           self.loadData();
+          $("#btnDelete").hide();
         })
         .fail(function (e) {
+          $(".alert-delete").hide();
           //Xóa không thành công cũng sẽ hiển thị thông báo thất bại
-          self.showNotification("Xóa thất bại", "success");
-          console.log(e);
+          self.showNotification("Xóa thất bại", "fail");
+          self.deleteLink = "";
+          $("#btnDelete").hide();
         });
     });
   }
@@ -159,22 +161,24 @@ class BaseJS {
   renderComboBox() {
     let self = this;
     //load các combobox
-    var comboBoxs = $("#cbxCustomerGroup");
+
+    var comboBoxs = $("select[notLoaded]");
     //show màn hình chờ cho người dùng biết đang load dữ liệu
     $(".loading").show();
     //Lấy dữ liệu nhóm khách hàng
     $.each(comboBoxs, function (index, comboBox) {
-      let linkApi = $(comboBox).attr("linkApi");
-      let inputField = $(comboBox).attr("inputField");
-      let nameDisplay = $(comboBox).attr("nameDisplay");
+      let selectField = $(comboBox).attr("selectField");
+      $(comboBox).empty();
       $.ajax({
         type: "GET",
-        url: self.host + linkApi,
+        url: self.host + selectField,
       })
         .done((res) => {
           $.each(res, function (index, value) {
-            let temp = `<option value="${value[inputField]}">${value[nameDisplay]}</option>`;
-            $(comboBox).append(temp);
+            let option = `<option ${selectField}Value="${
+              value[selectField + "Id"]
+            }" >${value[selectField + "Name"]}</option>`;
+            $(comboBox).append(option);
           });
         })
         .fail((e) => {
@@ -193,7 +197,7 @@ class BaseJS {
     $(".add-user-m-btn").click(function () {
       self.method = "POST";
       try {
-        if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
+        // if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
 
         $(".include-content").show();
         $("[inputField]").val(null);
@@ -250,7 +254,6 @@ class BaseJS {
             let inputField = $(input).attr("inputField");
             let value = $(input).attr("genderValue");
             entity[inputField] = value;
-            debugger;
           }
         } else {
           let inputField = $(input).attr("inputField");
@@ -260,12 +263,18 @@ class BaseJS {
       });
       //Gọi API thêm dữ liệu lên server
       if (self.method === "PUT") {
-        entity.CustomerId = self.CustomerId;
+        entity.EmployeeId = self.EmployeeId;
       }
+      let url =
+        self.host +
+        self.router +
+        "/" +
+        (self.method == "PUT" ? self.EmployeeId : " ");
+      debugger;
       //kiểm tra biến check rồi mới gửi request
       if (check) {
         $.ajax({
-          url: self.host + self.router,
+          url: url,
           method: self.method,
           data: JSON.stringify(entity),
           contentType: "application/json",
@@ -288,12 +297,14 @@ class BaseJS {
           })
           .fail(function (e) {
             if (self.method === "PUT") {
-              // + đưa ra thông báo thất bại 
+              // + đưa ra thông báo thất bại
               self.showNotification("Sửa thông tin thất bại", "fail");
             } else if (self.method === "POST") {
-              // + đưa ra thông báo thất bại 
+              // + đưa ra thông báo thất bại
               self.showNotification("Thêm khách thất bại", "fail");
             }
+
+            console.log(e);
           });
       }
     });
@@ -308,7 +319,7 @@ class BaseJS {
       self.method = "PUT";
 
       $("[inputField]").val(null);
-      if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
+      // if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
       $(".include-content").show();
       //Lấy id của bản ghi
       let id = $(this).data("EmployeeId");
@@ -318,7 +329,7 @@ class BaseJS {
         url: self.host + self.router + "/" + id,
       })
         .done((res) => {
-          self.CustomerId = res.CustomerId;
+          self.EmployeeId = res.EmployeeId;
           //lấy tất cả các input từ form HTML
           var allInputField = $("[inputField]");
           $.each(allInputField, function (index, input) {
@@ -327,29 +338,26 @@ class BaseJS {
               //Các trường nào quyết định sẽ hiển thị theo kiểu radio sẽ handle bên trong này
               //Trong trường hợp này chỉ có Gender muốn hiển thị theo kiểu radio nên chỉ bắt sự kiện
               //inputField là Gender
-
             } else if ($(input).attr("type") == "date") {
               //Với các trường kiểu date tách xử lí riêng, chỉ có date of birth nên handle ngay không cần kiểm tra tên trường nữa :))
               let inputField = $(input).attr("inputField");
               if (res[inputField]) {
                 let day = new Date(res[inputField]);
-                let date = day.getDate();
-                let month = day.getMonth();
-                let year = day.getFullYear();
-                if (date < 10) date = "0" + date;
-                if (month + 1 < 10) month = "0" + (month + 1);
-                $(input).val(year + "-" + month + "-" + date);
               }
-            }
-            else if ($(input).attr("type") === "select") {
-              let inputField = $(input).attr("inputField");
+            } else if ($(input).attr("type") === "select") {
+              let selectField = $(input).attr("selectField");
               let allOptions = $(this).find("option");
-              $.each(allOptions, function (index, value) { 
-                 console.log(value.attr(`${inputField}Value`));
+              let resField = $(this).attr("resField");
+              $.each(allOptions, function (index, value) {
+                let valueOfSelect = $(value).attr(selectField + "Value");
+                let valueFromRes = res[resField];
+                if (valueOfSelect.localeCompare(valueFromRes) === 0) {
+                  $(value).prop("selected", true);
+                } else {
+                  $(value).prop("selected", false);
+                }
               });
-              debugger
-            }
-            else {
+            } else {
               let inputField = $(input).attr("inputField");
               $(input).val(res[inputField]);
             }
@@ -393,7 +401,6 @@ class BaseJS {
       }
     });
   }
-
 
   /**
    * Đưa ngày tháng ra theo định dạng
@@ -447,15 +454,14 @@ class BaseJS {
         async: false,
       }).done((res) => {
         $.each(res, function (index, value) {
+          //value là một object employee trả về
           let tr = $("<tr></tr>");
           $(tr).data("EmployeeId", value.EmployeeId);
           $.each(ths, (ind, val) => {
+            //duyệt qua hết các tất cả các cột để lấy các thuộc tính tương ứng
             var fieldName = $(val).attr("fieldName");
-
-            //cột đầu tiên của mỗi row trên table sẽ dùng để hiển thị 1 cái thùng rác nhằm mục đích ấn vào để xóa dữ liệu
-            //trên dòng tương ứng
             var typeFormat = $(val).attr("formatType");
-
+            var text_align = $(val).attr("class");
             var data = value[fieldName];
             if (data) {
               if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
@@ -466,7 +472,7 @@ class BaseJS {
             } else {
               data = "";
             }
-            var td = `<td class="alight-left-table">${data}</td>`;
+            var td = `<td class="${text_align}">${data}</td>`;
             $(tr).append(td);
             $(".table-content").first().append(tr);
             $(".table-content").first().append(tr);
@@ -477,6 +483,16 @@ class BaseJS {
       });
     } catch (error) {
       console.log(error);
+    }
+  }
+  formatDateCalendar(day, type) {
+    if (type === "mmddyyyy") {
+      let date = day.getDate();
+      let month = day.getMonth();
+      let year = day.getFullYear();
+      if (date < 10) date = "0" + date;
+      if (month + 1 < 10) month = "0" + (month + 1);
+      $(input).val(year + "-" + month + "-" + date);
     }
   }
 }

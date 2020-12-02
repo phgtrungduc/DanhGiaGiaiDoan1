@@ -62,7 +62,7 @@ namespace MISA.Infrastructure {
         }
 
         public IEnumerable<TEntity> GetEntities() {
-            var entities = _dbConnection.Query<TEntity>($"SELECT * FROM {_tableName}", commandType: CommandType.Text);//Chạy câu lệnh đầu query
+            var entities = _dbConnection.Query<TEntity>($"Proc_Get{_tableName}", commandType: CommandType.StoredProcedure);//Chạy câu lệnh đầu query
             //Trả về dữ liệu
             return entities;
         }

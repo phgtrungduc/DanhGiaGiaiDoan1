@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/common/button.css">
     <link rel="stylesheet" href="/css/common/loading.css">
+    <link rel="stylesheet" href="/css/common/notification.css">
+    <link rel="stylesheet" href="/css/page/employee.css">
     <script src="/js/common/jquery.js"></script>
 </head>
 
@@ -116,14 +118,15 @@
                                 <i class="fas fa-search"></i>
                             </div>
                             <div class="input-input-icon">
-                                <input type="text" placeholder="Tìm kiếm theo Mã,Tên hoặc Số điện thoại
-                                    class=" text-input-icon" style="width: 250px;">
+                                <input type="text" placeholder="Tìm kiếm theo Mã,Tên hoặc Số điện thoại"
+                                    class="text-input-icon" style="width: 250px;">
                             </div>
                         </div>
-                        <select name="Abc" id="">
+                        <select name="Abc" id="cbxDepartment" selectField="Department" resField="DepartmentId"
+                            notLoaded>
                             <option value="" selected style="width: 200px;">Tất cả phòng ban</option>
                         </select>
-                        <select name="Abc" id="">
+                        <select name="Abc" id="cbxPosition" selectField="Position" resField="PositionId" notLoaded>
                             <option value="" selected style="width: 200px;">Tất cả vị trí</option>
                         </select>
                     </div>
@@ -144,7 +147,7 @@
                 <div class="content-main-content">
                     <div class="table">
                         <table>
-                            <colgroup class="text-align-left">
+                            <colgroup>
                                 <col span="1">
                                 <col span="1">
                                 <col span="1">
@@ -160,12 +163,13 @@
                                 <th fieldName="EmployeeCode" class="text-align-left">Mã nhân viên</th>
                                 <th fieldName="FullName" class="text-align-left">Họ và tên</th>
                                 <th fieldName="Gender" class="text-align-left">Giới tính</th>
-                                <th fieldName="DateOfBirth" typeFormat="ddmmyyyy" class="text-align-center">Ngày sinh</th>
+                                <th fieldName="DateOfBirth" formatType="ddmmyyyy" class="text-align-center">Ngày sinh
+                                </th>
                                 <th fieldName="PhoneNumber" class="text-align-left">Điện thoại</th>
                                 <th fieldName="Email" class="text-align-left">Email</th>
-                                <th fieldName="PositionId" class="text-align-left">Chức vụ</th>
-                                <th fieldName="DepartmentId" class="text-align-left">Phòng ban</th>
-                                <th fieldName="Salary" class="text-align-right">Mức lương cơ bản</th>
+                                <th fieldName="PositionName" class="text-align-left">Chức vụ</th>
+                                <th fieldName="DepartmentName" class="text-align-left">Phòng ban</th>
+                                <th fieldName="Salary" class="text-align-right" formatType="money">Mức lương cơ bản</th>
                                 <th fieldName="WorkStatus" class="text-align-left">Tình trạng công việc</th>
                             </thead>
 
@@ -260,19 +264,21 @@
                                 <div class="m-col m-flex-1">
                                     <div class="m-label" for="dtDateOfBirth">Ngày sinh</div>
                                     <div class="m-control"><input id="dtDateOfBirth" type="date"
-                                            inputField="DateOfBirth" /></div>
+                                            inputField="DateOfBirth" placeholder="dd-mm-yyyy" value=""
+                                            min="1997-01-01" max="2030-12-31"/></div>
                                 </div>
                                 <div class="m-flex-1">
                                     <!-- Giới tính(0 - Nữ; 1 - Nam; 2 - Khác) -->
                                     <div class="m-label">Giới tính</div>
-                                    <select id="slGender" type="select" class="m-control" inputField="Gender">
-                                        <option id="optMale" GenderValue="0" name="gender" >
+                                    <select id="slGender" type="select" class="m-control" inputField="Gender"
+                                        selectField="Gender" resField="Gender">
+                                        <option id="optMale" GenderValue="0" name="gender">
                                             Nữ
                                         </option>
-                                        <option id="optFeMale" GenderValue="1" name="gender"  >
+                                        <option id="optFeMale" GenderValue="1" name="gender">
                                             Nam
                                         </option>
-                                        <option id="optOther" GenderValue="2" name="gender" >
+                                        <option id="optOther" GenderValue="2" name="gender">
                                             Khác
                                         </option>
                                     </select>
@@ -327,7 +333,8 @@
                                 <div class="m-flex-1">
                                     <div class="m-label">Vị trí</div>
                                     <div class="m-control">
-                                        <select id="slPosition" type="select" class="m-control" inputField="PositionId">
+                                        <select id="slPosition" type="select" class="m-control" inputField="Position"
+                                            selectField="Position" resField="PositionId" notLoaded>
                                             <!-- <option id="optMale" value="0" name="gender" inputField="PositionId">
                                                 Nam
                                             </option>
@@ -344,7 +351,8 @@
                                     <div class="m-label">Phòng ban</div>
                                     <div class="m-control">
                                         <select id="slDepartmentId" type="select" class="m-control"
-                                            inputField="DepartmentId">
+                                            inputField="Department" selectField="Department" resField="DepartmentId"
+                                            notLoaded>
                                             <!-- <option id="optMale" value="0" name="gender" inputField="Gender">
                                                 Nam
                                             </option>
@@ -378,17 +386,18 @@
                                 <div class="m-flex-1">
                                     <div class="m-label">Tình trạng công việc</div>
                                     <div class="m-control">
+                                        <!-- Tình trạng làm việc (0:Đang làm việc;1-Đang thử việc;2-Đã nghỉ việc) -->
                                         <select id="slWorkStatus" type="select" class="m-control"
-                                            inputField="WorkStatus">
-                                            <!-- <option id="optMale" value="0" name="gender" inputField="Gender">
-                                            Nam
-                                        </option>
-                                        <option id="optFeMale" value="1" name="gender" inputField="Gender" selected>
-                                            Nữ
-                                        </option>
-                                        <option id="optOther" value="2" name="gender" inputField="Gender">
-                                            Không xác định
-                                        </option> -->
+                                            inputField="WorkStatus" selectField="WorkStatus" resField="WorkStatus">
+                                            <option id="optWorking" WorkStatusValue="0" name="WorkStatus">
+                                                Đang làm việc
+                                            </option>
+                                            <option id="optTryWorking" WorkStatusValue="1" name="WorkStatus">
+                                                Đang thử việc
+                                            </option>
+                                            <option id="optStopWorking" WorkStatusValue="2" name="WorkStatus">
+                                                Đã nghỉ việc
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

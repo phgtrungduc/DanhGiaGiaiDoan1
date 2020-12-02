@@ -78,10 +78,18 @@ namespace MISA.ApplicationCore.Entity {
         /// Id vị trí công việc
         /// </summary>
         public string PositionId { get; set; }
+        // <summary>
+        /// Tên vị trí công việc
+        /// </summary>
+        public string PositionName { get; set; }
         /// <summary>
         /// Id phòng ban làm việc
         /// </summary>
         public string DepartmentId { get; set; }
+        /// <summary>
+        /// Tên phòng ban làm việc
+        /// </summary>
+        public string DepartmentName { get; set; }
         #endregion
 
         #region Method

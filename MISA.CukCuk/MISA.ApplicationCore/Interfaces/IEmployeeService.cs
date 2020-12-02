@@ -6,5 +6,6 @@ using System.Text;
 
 namespace MISA.ApplicationCore.Interfaces {
     public interface IEmployeeService:IBaseService<Employee> {
+        IEnumerable<Employee> SearchEmployee(string param);
     }
 }

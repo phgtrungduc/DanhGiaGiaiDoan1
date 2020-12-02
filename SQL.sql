@@ -55,12 +55,14 @@ SELECT * FROM Employee WHERE FullName = "Trần Trọng Tuấn"
   )
   INSERT INTO Test VALUES ('','Duc')
 ;
-SET @CODE = (CAST((SELECT SUBSTRING(MAX(EmployeeCode),3,8)  AS maulon FROM Employee)  AS UNSIGNED)+2);
+SET @CODE = (CAST((SELECT SUBSTRING(MAX(EmployeeCode),3,8)  AS maulon FROM Employee)  AS UNSIGNED)+1);
 
 /*SELECT SUBSTRING(MAX(EmployeeCode),3,8) FROM Employee*/ 
 /*(EmployeeId, EmployeeCode, FullName, Gender, DateOfBirth, Email,
   PhoneNumber, IdentityNumber, IdentityDate, IdentityPlace, JoinDate, PersonalTaxCode, Salary, WorkStatus, PositionId, DepartmentId)*/
-  SELECT CAST((SELECT SUBSTRING(MAX(EmployeeCode),3,8)  AS maulon FROM Employee)  AS UNSIGNED)+1 AS Code;
+  SELECT MAX(EmployeeCode) FROM Employee
+  SELECT CAST((SELECT SUBSTRING(MAX(EmployeeCode),3,8) FROM Employee)  AS UNSIGNED)+1 AS Code;
   INSERT INTO Employee 
    VALUES("11acd342-735a-6bbe-73de-23e1777799",@CODE   , "Duc", 1,"2010-01-12", "p@gmail.com",
   "03636265455", "113717558", "2010-01-12", "Ha Noi", "2010-01-12", "525845145", "5654555", 1, "6123f364-3fd4-3ffe-3e6b-1629b83affd2", "75cce5a6-4f7f-3671-3cf3-eb0223d0a4f7");
+  CALL Proc_SearchEmployee("Mạnh");

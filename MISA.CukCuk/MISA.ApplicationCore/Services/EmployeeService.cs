@@ -11,6 +11,10 @@ namespace MISA.ApplicationCore.Services {
         public EmployeeService(IEmployeeRepository employeeRepository) : base(employeeRepository) {
             _employeeRepository = employeeRepository;
         }
+
+        public IEnumerable<Employee> SearchEmployee(string param) {
+            return _employeeRepository.SearchEmployee(param);
+        }
         #endregion
     }
 }

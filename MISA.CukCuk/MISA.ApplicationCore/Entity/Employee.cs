@@ -31,7 +31,7 @@ namespace MISA.ApplicationCore.Entity {
         /// <summary>
         /// Ngày - tháng - năm sinh
         /// </summary>
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         /// <summary>
         /// Giới tính (0 - Nữ; 1 - Nam; 2 - Khác)
         /// </summary>
@@ -53,7 +53,7 @@ namespace MISA.ApplicationCore.Entity {
         /// <summary>
         /// Ngày cấp chứng minh nhân dân
         /// </summary>
-        public DateTime IdentityDate { get; set; }
+        public DateTime? IdentityDate { get; set; }
         /// <summary>
         /// Nơi cấp chứng minh nhân
         /// </summary>
@@ -61,7 +61,7 @@ namespace MISA.ApplicationCore.Entity {
         /// <summary>
         /// Ngày gia nhập công ty
         /// </summary>
-        public DateTime JoinDate { get; set; }
+        public DateTime? JoinDate { get; set; }
         /// <summary>
         /// Mã số thuế cá nhân
         /// </summary>
@@ -69,11 +69,11 @@ namespace MISA.ApplicationCore.Entity {
         /// <summary>
         /// Mức lương cơ bản
         /// </summary>
-        public double Salary { get; set; }
+        public double? Salary { get; set; }
         /// <summary>
         /// Tình trạng làm việc (0:Đang làm việc;1-Đang thử việc;2-Đã nghỉ việc)
         /// </summary>
-        public int WorkStatus { get; set; }
+        public int? WorkStatus { get; set; }
         /// <summary>
         /// Id vị trí công việc
         /// </summary>

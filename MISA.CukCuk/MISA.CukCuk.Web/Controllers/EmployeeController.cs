@@ -13,5 +13,10 @@ namespace MISA.CukCuk.Web.Controllers {
         public EmployeeController(IEmployeeService employeeService):base(employeeService) {
             _employeeService = employeeService;
         }
+        [HttpGet("search/{param}")]
+        public IActionResult Get([FromRoute]string param) {
+            var employee = _employeeService.SearchEmployee(param);
+            return Ok(employee);
+        }
     }
 }

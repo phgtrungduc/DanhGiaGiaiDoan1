@@ -168,7 +168,6 @@ class BaseJS {
     //Lấy dữ liệu nhóm khách hàng
     $.each(comboBoxs, function (index, comboBox) {
       let selectField = $(comboBox).attr("selectField");
-      $(comboBox).empty();
       $.ajax({
         type: "GET",
         url: self.host + selectField,
@@ -255,12 +254,19 @@ class BaseJS {
             let value = $(input).attr("genderValue");
             entity[inputField] = value;
           }
+        } else if ($(input).attr("type") === "select") {
+          let selectField = $(input).attr("selectField");
+          let option = $(this).find("option:selected");
+          let resField = $(this).attr("resField");
+          let valueOfSelect = selectField + "Value";
+          entity[resField] = $(option).attr(valueOfSelect);
         } else {
           let inputField = $(input).attr("inputField");
           let value = $(input).val();
           entity[inputField] = value;
         }
       });
+      $(".loading").show();
       //Gọi API thêm dữ liệu lên server
       if (self.method === "PUT") {
         entity.EmployeeId = self.EmployeeId;
@@ -270,7 +276,6 @@ class BaseJS {
         self.router +
         "/" +
         (self.method == "PUT" ? self.EmployeeId : " ");
-      debugger;
       //kiểm tra biến check rồi mới gửi request
       if (check) {
         $.ajax({
@@ -283,12 +288,13 @@ class BaseJS {
             // Sau khi lưu thành công thì:
             // + ẩn form chi tiết,
             $(".include-content").hide();
-
+            
             if (self.method === "PUT") {
               // + đưa ra thông báo thành công
               self.showNotification("Sửa thông tin thành công", "success");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thành công
+              $(".loading").hide();
               self.showNotification("Thêm khách hàng thành công", "success");
             }
 
@@ -298,9 +304,11 @@ class BaseJS {
           .fail(function (e) {
             if (self.method === "PUT") {
               // + đưa ra thông báo thất bại
+              $(".loading").hide();
               self.showNotification("Sửa thông tin thất bại", "fail");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thất bại
+              $(".loading").hide();
               self.showNotification("Thêm khách thất bại", "fail");
             }
 
@@ -343,6 +351,7 @@ class BaseJS {
               let inputField = $(input).attr("inputField");
               if (res[inputField]) {
                 let day = new Date(res[inputField]);
+                $(input).val(self.formatDateCalendar(day,"mmddyyyy"));
               }
             } else if ($(input).attr("type") === "select") {
               let selectField = $(input).attr("selectField");
@@ -469,6 +478,9 @@ class BaseJS {
               } else if (typeFormat === "money") {
                 data = self.formatMoney(data);
               }
+              else {
+                data = self.customFormat(fieldName,data);
+              }
             } else {
               data = "";
             }
@@ -491,8 +503,12 @@ class BaseJS {
       let month = day.getMonth();
       let year = day.getFullYear();
       if (date < 10) date = "0" + date;
-      if (month + 1 < 10) month = "0" + (month + 1);
-      $(input).val(year + "-" + month + "-" + date);
+      month++;
+      if (month < 10) month = "0" + month;
+      return year + "-" + month + "-" + date;
     }
+  }
+  customFormat(fieldName,data){
+    return data;
   }
 }

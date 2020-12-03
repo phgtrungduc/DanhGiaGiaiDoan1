@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="/css/common/main.css">
     <link href="/css/common/button.css" rel="stylesheet" />
-    <link href="../css/common/selectcss.css" rel="stylesheet" />
-    <link href="../css/common/input.css" rel="stylesheet" />
+    <link href="/css/common/selectcss.css" rel="stylesheet" />
+    <link href="/css/common/input.css" rel="stylesheet" />
     <link rel="stylesheet" href="/css/common/header.css">
     <link rel="stylesheet" href="/css/common/sidebar.css">
     <link rel="stylesheet" href="/css/common/content.css">
@@ -21,10 +21,15 @@
     <link rel="stylesheet" href="/css/common/loading.css">
     <link rel="stylesheet" href="/css/common/notification.css">
     <link rel="stylesheet" href="/css/page/employee.css">
-    <script src="/js/common/jquery.js"></script>
+    <link rel="stylesheet" href="../assets/lib/jquery-ui-themes/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 
 <body>
+    <div class="loading">
+        <div class="loading-icon"></div>
+    </div>
     <div class="down-content">
         <div class="sidebar">
             <div class="logo-site">
@@ -119,15 +124,15 @@
                             </div>
                             <div class="input-input-icon">
                                 <input type="text" placeholder="Tìm kiếm theo Mã,Tên hoặc Số điện thoại"
-                                    class="text-input-icon" style="width: 250px;">
+                                    class="text-input-icon search-another" style="width: 250px;" >
                             </div>
                         </div>
                         <select name="Abc" id="cbxDepartment" selectField="Department" resField="DepartmentId"
                             notLoaded>
-                            <option value="" selected style="width: 200px;">Tất cả phòng ban</option>
+                            <option value="" selected style="width: 200px;" departmentValue="all">Tất cả phòng ban</option>
                         </select>
                         <select name="Abc" id="cbxPosition" selectField="Position" resField="PositionId" notLoaded>
-                            <option value="" selected style="width: 200px;">Tất cả vị trí</option>
+                            <option value="" selected style="width: 200px;" positionValue="all">Tất cả vị trí</option>
                         </select>
                     </div>
                     <div class="right">
@@ -263,9 +268,8 @@
                             <div class="m-row m-flex">
                                 <div class="m-col m-flex-1">
                                     <div class="m-label" for="dtDateOfBirth">Ngày sinh</div>
-                                    <div class="m-control"><input id="dtDateOfBirth" type="date"
-                                            inputField="DateOfBirth" placeholder="dd-mm-yyyy" value=""
-                                            min="1997-01-01" max="2030-12-31"/></div>
+                                    <div class="m-control"><input id="dtDateOfBirth" type="datepicker"
+                                            inputField="DateOfBirth" placeholder="dd/mm/yyyy" /></div>
                                 </div>
                                 <div class="m-flex-1">
                                     <!-- Giới tính(0 - Nữ; 1 - Nam; 2 - Khác) -->
@@ -293,7 +297,7 @@
                                 <div class="m-flex-1">
                                     <div class="m-label">Ngày cấp</div>
                                     <div class="m-control">
-                                        <input type="date" id="dtIdentityDate" inputField="IdentityDate">
+                                        <input type="datepicker" id="dtIdentityDate" inputField="IdentityDate" placeholder="dd/mm/yyyy">
                                     </div>
                                 </div>
 
@@ -373,14 +377,15 @@
                                 </div>
                                 <div class="m-flex-1">
                                     <div class="m-label">Mức lương cơ bản</div>
-                                    <div class="m-control"><input type="tel" inputField="Salary" id="txtSalary" /></div>
+                                    <div class="m-control"><input type="money" inputField="Salary" id="txtSalary" />
+                                    </div>
                                 </div>
 
                             </div>
                             <div class="m-row m-flex">
                                 <div class="m-flex-1">
                                     <div class="m-label">Ngày gia nhập công ty</div>
-                                    <div class="m-control"><input type="date" inputField="JoinDate" id="dtJoinDate" />
+                                    <div class="m-control"><input type="datepicker" inputField="JoinDate" id="dtJoinDate" />
                                     </div>
                                 </div>
                                 <div class="m-flex-1">

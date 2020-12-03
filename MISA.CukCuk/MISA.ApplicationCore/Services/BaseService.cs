@@ -12,7 +12,6 @@ namespace MISA.ApplicationCore {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity:BaseEntity{
         IBaseRepository<TEntity> _baseRepository;
         protected ServiceResult _serviceResult;
-        ResourceManager rm;
         #region Constructor
         public BaseService(IBaseRepository<TEntity> baseRepository) {
             _baseRepository = baseRepository;

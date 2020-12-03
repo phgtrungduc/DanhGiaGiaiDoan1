@@ -1,8 +1,12 @@
 class BaseJS {
   constructor() {
     this.host = "../api/v1/";
+    this.router = "";
+    this.method = "";
+    this.maxcode = "";
+    this.param = "";
     this.initEvents();
-    this.method = ""; //method là PUT hoặc POST ứng với kiểu sửa hoặc thêm entity
+    //method là PUT hoặc POST ứng với kiểu sửa hoặc thêm entity
   }
 
   /**
@@ -14,8 +18,12 @@ class BaseJS {
     var self = this;
     //Load lại dữ liệu khi ấn nút sync
     $(".sync-m-btn").click(function () {
-      self.loadData;
+      self.loadData();
     });
+
+    //gán datepicker cho các input date
+    this.setDatePicker();
+    //load dữ liệu cho các combobox
     this.renderComboBox();
     //Ấn nút hủy trên thông báo xóa entity
     this.cancleDelete();
@@ -48,6 +56,10 @@ class BaseJS {
     this.checkEmail();
   }
 
+  setDatePicker() {
+    let datepicker = $("[type='datepicker']");
+    $(datepicker).datepicker({ dateFormat: "dd/mm/yy" });
+  }
   /**
    * Hiển thị thông báo
    * @param {string} content : Nội dung thông báo
@@ -197,9 +209,10 @@ class BaseJS {
       self.method = "POST";
       try {
         // if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
-
         $(".include-content").show();
-        $("[inputField]").val(null);
+        let allInput = $("[inputField]");
+        $(allInput).val(null);
+        $("[inputField='EmployeeCode']").val(self.maxcode);
       } catch (e) {
         console.log(e);
       }
@@ -254,19 +267,26 @@ class BaseJS {
             let value = $(input).attr("genderValue");
             entity[inputField] = value;
           }
+        } else if ($(input).attr("type") === "money") {
+          let inputField = $(input).attr("inputField");
+          let value = $(input).attr("MoneyValue");
+          entity[inputField] = value;
         } else if ($(input).attr("type") === "select") {
           let selectField = $(input).attr("selectField");
           let option = $(this).find("option:selected");
           let resField = $(this).attr("resField");
           let valueOfSelect = selectField + "Value";
           entity[resField] = $(option).attr(valueOfSelect);
+        } else if ($(input).attr("type") === "datepicker") {
+          let inputField = $(input).attr("inputField");
+          let value = $(input).datepicker("getDate");
+          entity[inputField] = new Date(value);
         } else {
           let inputField = $(input).attr("inputField");
           let value = $(input).val();
           entity[inputField] = value;
         }
       });
-      $(".loading").show();
       //Gọi API thêm dữ liệu lên server
       if (self.method === "PUT") {
         entity.EmployeeId = self.EmployeeId;
@@ -278,6 +298,7 @@ class BaseJS {
         (self.method == "PUT" ? self.EmployeeId : " ");
       //kiểm tra biến check rồi mới gửi request
       if (check) {
+        $(".loading").show();
         $.ajax({
           url: url,
           method: self.method,
@@ -287,15 +308,30 @@ class BaseJS {
           .done(function (res) {
             // Sau khi lưu thành công thì:
             // + ẩn form chi tiết,
-            $(".include-content").hide();
-            
+            console.log(res.Data);
             if (self.method === "PUT") {
               // + đưa ra thông báo thành công
+              $(".loading").hide();
               self.showNotification("Sửa thông tin thành công", "success");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thành công
               $(".loading").hide();
-              self.showNotification("Thêm khách hàng thành công", "success");
+
+              if (res.MISACode === 900) {
+                let error = "";
+                let errorLength = res.Data.length;
+                for (let i = 0; i < errorLength; i++) {
+                  if (i != 0) {
+                    error += ", " + res.Data[i];
+                  } else {
+                    error += res.Data[i];
+                  }
+                }
+                self.showNotification(error, "fail");
+              } else {
+                $(".include-content").hide();
+                self.showNotification("Thêm khách hàng thành công", "success");
+              }
             }
 
             // + load lại lại dữ liệu
@@ -346,13 +382,19 @@ class BaseJS {
               //Các trường nào quyết định sẽ hiển thị theo kiểu radio sẽ handle bên trong này
               //Trong trường hợp này chỉ có Gender muốn hiển thị theo kiểu radio nên chỉ bắt sự kiện
               //inputField là Gender
-            } else if ($(input).attr("type") == "date") {
-              //Với các trường kiểu date tách xử lí riêng, chỉ có date of birth nên handle ngay không cần kiểm tra tên trường nữa :))
+            } else if ($(input).attr("type") == "datepicker") {
               let inputField = $(input).attr("inputField");
               if (res[inputField]) {
                 let day = new Date(res[inputField]);
-                $(input).val(self.formatDateCalendar(day,"mmddyyyy"));
+                $(input).datepicker({ format: "dd/mm/yyyy" });
+                $(input).datepicker("setDate", day);
               }
+            } else if ($(input).attr("type") === "money") {
+              let inputField = $(input).attr("inputField");
+              let value = res[inputField];
+              $(input).attr("MoneyValue", value);
+              $(input).val(self.formatMoney(value) + " (VND)   ");
+              $(input).css("text-align", "right");
             } else if ($(input).attr("type") === "select") {
               let selectField = $(input).attr("selectField");
               let allOptions = $(this).find("option");
@@ -442,10 +484,11 @@ class BaseJS {
    * @param {string} data : data là giá trị cần định dạng tiền tệ
    */
   formatMoney(data) {
-    return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,"); // 12,345.67
+    return data.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."); // 12,345.67
   }
   loadData() {
     //show màn hình chờ cho người dùng biết đang load dữ liệu
+    
     $(".loading").show();
     //Lấy thông tin các cột dữ liệu
     try {
@@ -457,13 +500,16 @@ class BaseJS {
         fieldName.push();
       });
       //Map dữ liệu lên UI
+      let count =0;
       $.ajax({
         type: "GET",
-        url: self.host + self.router,
+        url: self.host + self.router+self.param,
         async: false,
       }).done((res) => {
         $.each(res, function (index, value) {
           //value là một object employee trả về
+          let leng = res.length;
+          count++;
           let tr = $("<tr></tr>");
           $(tr).data("EmployeeId", value.EmployeeId);
           $.each(ths, (ind, val) => {
@@ -477,9 +523,8 @@ class BaseJS {
                 data = self.formatDate(data, typeFormat);
               } else if (typeFormat === "money") {
                 data = self.formatMoney(data);
-              }
-              else {
-                data = self.customFormat(fieldName,data);
+              } else {
+                data = self.customFormat(fieldName, data);
               }
             } else {
               data = "";
@@ -489,8 +534,8 @@ class BaseJS {
             $(".table-content").first().append(tr);
             $(".table-content").first().append(tr);
           });
-
-          $(".loading").hide();
+          if (count===leng) $(".loading").hide();
+          debugger
         });
       });
     } catch (error) {
@@ -508,7 +553,7 @@ class BaseJS {
       return year + "-" + month + "-" + date;
     }
   }
-  customFormat(fieldName,data){
+  customFormat(fieldName, data) {
     return data;
   }
 }

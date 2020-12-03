@@ -23,9 +23,10 @@ namespace MISA.CukCuk.Web.Controllers {
         /// </summary>
         /// <returns>Danh sách khách hàng</returns>
         /// createdBy:PTDuc(23/12/2020)
+        /// đây là ở thằng cha nhá
         [HttpGet]
-        public IActionResult Get() {
-            var entities = _baseService.GetEntities();
+        public virtual IActionResult Get(string department, string position) {
+                var entities = _baseService.GetEntities();
             return Ok(entities);
         }
 
@@ -48,7 +49,7 @@ namespace MISA.CukCuk.Web.Controllers {
             //Check trùng mã
             var serviceResult = _baseService.Add(entity);
             if (serviceResult.MISACode == MISACode.NotValid) {
-                return BadRequest(serviceResult);
+                return Ok(serviceResult);
             }
             else {
                 return Ok(serviceResult);
@@ -69,7 +70,12 @@ namespace MISA.CukCuk.Web.Controllers {
                 keyProperty.SetValue(entity, id);
             }
             var res = _baseService.Update(entity);
-            return Ok(res);
+            if (res.MISACode == MISACode.NotValid) {
+                return BadRequest(res);
+            }
+            else {
+                return Ok(res);
+            }
         }
 
         // DELETE api/<CustomersController>/5

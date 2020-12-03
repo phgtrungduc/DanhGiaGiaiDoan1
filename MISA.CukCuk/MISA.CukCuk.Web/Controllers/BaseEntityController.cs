@@ -32,11 +32,12 @@ namespace MISA.CukCuk.Web.Controllers {
 
         // GET api/<CustomersController>/5
         /// <summary>
-        /// 
+        /// Tìm kiếm nhân viên theo ID
         /// </summary>
         /// <param name="id">Mã khách hàng</param>
         /// <param name="name"></param>
         /// <returns></returns>
+        /// CreatedBy: PTDuc(4/12/2020)
         [HttpGet("{id}")]
         public IActionResult Get(Guid id) {
             var entity = _baseService.GetEntityById(id);
@@ -44,9 +45,15 @@ namespace MISA.CukCuk.Web.Controllers {
         }
 
         // POST api/<CustomersController>
+        /// <summary>
+        /// Thêm mới 1 đối tượng
+        /// </summary>
+        /// <param name="entity">Đối tượng truyền lên từ client</param>
+        /// <returns></returns>
+        /// CreatedBy: PTDuc(4/12/2020)
         [HttpPost]
         public IActionResult Post([FromBody] TEntity entity) {
-            //Check trùng mã
+
             var serviceResult = _baseService.Add(entity);
             if (serviceResult.MISACode == MISACode.NotValid) {
                 return BadRequest(serviceResult);
@@ -56,7 +63,7 @@ namespace MISA.CukCuk.Web.Controllers {
             }
 
         }
-        // PUT api/<CustomersController>/5
+        
         [HttpPut("{id}")]
         public IActionResult Put([FromRoute] string id,[FromBody]TEntity entity) {
             var keyProperty = entity.GetType().GetProperty($"{typeof(TEntity).Name}Id");

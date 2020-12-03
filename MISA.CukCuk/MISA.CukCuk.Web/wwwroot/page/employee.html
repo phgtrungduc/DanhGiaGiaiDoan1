@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>Employee</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    
+
     <link rel="stylesheet" href="/css/common/main.css">
     <link href="/css/common/button.css" rel="stylesheet" />
     <link href="/css/common/selectcss.css" rel="stylesheet" />
@@ -122,7 +122,7 @@
                             </div>
                             <div class="input-input-icon">
                                 <input type="text" placeholder="Tìm kiếm theo Mã,Tên hoặc Số điện thoại"
-                                    class="text-input-icon search-another" style="width: 250px;" >
+                                    class="text-input-icon search-another" style="width: 250px;">
                             </div>
                         </div>
                         <select name="Abc" id="cbxDepartment" selectField="Department" resField="DepartmentId"
@@ -153,7 +153,6 @@
                             <colgroup>
                                 <col span="1">
                                 <col span="1">
-                                <col span="1">
                                 <col span="1" class="text-align-center">
                                 <col span="1">
                                 <col span="1">
@@ -179,7 +178,7 @@
                             <tbody class="table-content body-table">
                             </tbody>
                         </table>
-                        
+
                     </div>
                 </div>
                 <div class="content-main-footer">
@@ -255,7 +254,7 @@
                                 <div class="m-col m-flex-1">
                                     <div class="m-label">Mã nhân viên (<span style="color:red;">*</span>)</div>
                                     <div class="m-control"><input id="txtCustomerCode" required type="text"
-                                            inputField="EmployeeCode" /></div>
+                                            inputField="EmployeeCode" autofocus /></div>
                                 </div>
                                 <div class="m-flex-1 mg-left-10px">
                                     <div class="m-label">Họ và tên (<span style="color:red;">*</span>)</div>
@@ -296,7 +295,8 @@
                                 <div class="m-flex-1">
                                     <div class="m-label">Ngày cấp</div>
                                     <div class="m-control">
-                                        <input type="datepicker" id="dtIdentityDate" inputField="IdentityDate" placeholder="dd/mm/yyyy">
+                                        <input type="datepicker" id="dtIdentityDate" inputField="IdentityDate"
+                                            placeholder="dd/mm/yyyy">
                                     </div>
                                 </div>
 
@@ -376,7 +376,8 @@
                                 </div>
                                 <div class="m-flex-1">
                                     <div class="m-label">Mức lương cơ bản</div>
-                                    <div class="m-control"><input type="money" inputField="Salary" id="txtSalary" />
+                                    <div class="m-control"><input type="money" inputField="Salary" id="txtSalary"
+                                            style="text-align: right;" />
                                     </div>
                                 </div>
 
@@ -384,7 +385,8 @@
                             <div class="m-row m-flex">
                                 <div class="m-flex-1">
                                     <div class="m-label">Ngày gia nhập công ty</div>
-                                    <div class="m-control"><input type="datepicker" inputField="JoinDate" id="dtJoinDate" />
+                                    <div class="m-control"><input type="datepicker" inputField="JoinDate"
+                                            id="dtJoinDate" />
                                     </div>
                                 </div>
                                 <div class="m-flex-1">
@@ -432,16 +434,21 @@
     <div class="alert alert-delete">
         <div class="m-alert">
             <div class="alert-header m-flex">
-                <div class="alert-header-title"></div>
+                <div class="alert-header-title" style="font-weight: bold;">Xóa bản ghi</div>
                 <div class="alert-header-close btn-cancle-alert">
                     <i class="fas fa-times"></i>
                 </div>
             </div>
             <div class="alert-content">
-                
+                <div class="alert-content-icon">
+                    <img src="/assets/img/danger.png">
+                    </img>
+                </div>
+                <div class="alert-content-title">
+                </div>
             </div>
-            <div class="alert-footer" style="float: right;">
-                <div class="btn-alert m-flex">
+            <div class="alert-footer">
+                <div class="btn-alert m-flex" style="float: right;padding-right: 16px;">
                     <button class="m-btn m-btn-cancel second-button" style="margin-right: 8px;" id="btnCancleDelete">
                         Không
                     </button>
@@ -451,14 +458,26 @@
                 </div>
             </div>
         </div>
+
     </div>
     <!-- Hiển thị loading dữ liệu -->
-    
+
     <!-- phần hiển thị thông báo thêm, sửa, xóa thành công hay thất bại -->
     <div class="notification-group">
-        
+
     </div>
-    <div class="loading"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
     <script src="/js/common/main.js"></script>
     <script src="/js/common/base.js"></script>
     <script src="/js/page/employee.js"></script>

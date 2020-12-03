@@ -45,3 +45,6 @@
 .primary-button:focus,.second-button:focus {
   background-color: #01b075;
 }
+#btnConfirmDelete{
+  background-color: #F65454;
+}

@@ -8,6 +8,10 @@ using MISA.ApplicationCore.Entity;
 using MISA.ApplicationCore.Interfaces;
 
 namespace MISA.CukCuk.Web.Controllers {
+    /// <summary>
+    /// Controller lấy tất cả các phòng ban
+    /// </summary>
+    /// CreatedBy:PTDuc(04/12/2020)
     public class DepartmentController : BaseEntityController<Department> {
         IDepartmentService _departmentService;
         public DepartmentController(IDepartmentService departmentService) : base(departmentService) {

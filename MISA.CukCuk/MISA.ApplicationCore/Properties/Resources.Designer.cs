@@ -61,6 +61,42 @@ namespace MISA.ApplicationCore.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thêm thất bại .
+        /// </summary>
+        public static string Msg_AddFail {
+            get {
+                return ResourceManager.GetString("Msg_AddFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thêm thành công.
+        /// </summary>
+        public static string Msg_AddSuccess {
+            get {
+                return ResourceManager.GetString("Msg_AddSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email không đúng định dạng..
+        /// </summary>
+        public static string Msg_EmailTypeFail {
+            get {
+                return ResourceManager.GetString("Msg_EmailTypeFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dữ liệu không hợp lệ.
+        /// </summary>
+        public static string Msg_NotValidData {
+            get {
+                return ResourceManager.GetString("Msg_NotValidData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update thành công.
         /// </summary>
         public static string Msg_UpdateSuccess {

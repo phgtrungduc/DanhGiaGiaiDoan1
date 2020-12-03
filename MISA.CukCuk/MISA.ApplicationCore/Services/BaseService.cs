@@ -17,10 +17,14 @@ namespace MISA.ApplicationCore {
         public BaseService(IBaseRepository<TEntity> baseRepository) {
             _baseRepository = baseRepository;
             _serviceResult = new ServiceResult() { MISACode = Enums.MISACode.Success };
-            //rm = new ResourceManager(typeof(ModelEntities.Properties.Resource));
         }
-
-        public virtual ServiceResult Add(TEntity entity) {
+        /// <summary>
+        /// Thêm đối tượng 
+        /// </summary>
+        /// <param name="entity">object truyền lên từ client</param>
+        /// <returns>1 đối tượng serviceresult bao gồm thông báo,mã lỗi và data</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
+        public ServiceResult Add(TEntity entity) {
             entity.EntityState = Enums.EntityState.AddNew;
             // Thực hiện validate:
 
@@ -28,12 +32,12 @@ namespace MISA.ApplicationCore {
             if (isValidate == true) {
                 var row = _baseRepository.Add(entity);
                 if (row != 0) {
-                    _serviceResult.Messenger = "Thêm thành công";
+                    _serviceResult.Messenger = Properties.Resources.Msg_AddSuccess;
                     _serviceResult.Data = row;
                     _serviceResult.MISACode = Enums.MISACode.IsValid;
                 }
                 else {
-                    _serviceResult.Messenger = "Thêm thất bại " + _serviceResult.Messenger;
+                    _serviceResult.Messenger = Properties.Resources.Msg_AddFail + _serviceResult.Messenger;
                     _serviceResult.Data = row;
                     _serviceResult.MISACode = Enums.MISACode.NotValid;
                 }
@@ -44,19 +48,38 @@ namespace MISA.ApplicationCore {
                 return _serviceResult;
             }
         }
-
-        public int Delete(Guid entity) {
-            return _baseRepository.Delete(entity);
+        /// <summary>
+        /// Xoá đối tượng
+        /// </summary>
+        /// <param name="entityId">truyền vào id đối tượng cần xóa </param>
+        /// <returns></returns>
+        /// CreatedBy:PTDuc(04/12/2020)
+        public int Delete(Guid entityId) {
+            return _baseRepository.Delete(entityId);
         }
-
+        /// <summary>
+        /// Lấy tất cả các đối tượng
+        /// </summary>
+        /// <returns>List các đối tượng</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public IEnumerable<TEntity> GetEntities() {
             return _baseRepository.GetEntities();
         }
-
+        /// <summary>
+        /// Tìm kiếm các đối tượng theo id
+        /// </summary>
+        /// <param name="entityId">id đối tượng</param>
+        /// <returns>List các đói tượng có id đã truyền</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public TEntity GetEntityById(Guid entityId) {
             return _baseRepository.GetEntityById(entityId);
         }
-
+        /// <summary>
+        /// Update lại thông tin đối tượng
+        /// </summary>
+        /// <param name="entity">đối tượng với các thông tin update</param>
+        /// <returns>Thông báo kết quả</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public ServiceResult Update(TEntity entity) {
             entity.EntityState = Enums.EntityState.Update;
             var isValidate = Validate(entity);
@@ -76,7 +99,8 @@ namespace MISA.ApplicationCore {
         /// Hàm kiểm tra dữ liệu
         /// </summary>
         /// <param name="entity">object đối tượng cần validate các trường</param>
-        /// <returns></returns>
+        /// <returns>true nếu hợp lệ và ngược lại</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         private bool Validate(TEntity entity) {
             var mesArrayError = new List<string>();
             var isValidate = true;
@@ -99,7 +123,7 @@ namespace MISA.ApplicationCore {
                         isValidate = false;
                         mesArrayError.Add($"Thông tin {displayName.DisplayName} không được phép để trống.");
                         _serviceResult.MISACode = Enums.MISACode.NotValid;
-                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+                        _serviceResult.Messenger = Properties.Resources.Msg_NotValidData;
                     }
                 }
 
@@ -111,7 +135,7 @@ namespace MISA.ApplicationCore {
                         isValidate = false;
                         mesArrayError.Add($"Thông tin {displayName.DisplayName} đã có trên hệ thống.");
                         _serviceResult.MISACode = Enums.MISACode.NotValid;
-                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+                        _serviceResult.Messenger = Properties.Resources.Msg_NotValidData;
                     }
                 }
                 if (property.IsDefined(typeof(MaxLength), false)) {
@@ -123,10 +147,11 @@ namespace MISA.ApplicationCore {
                         isValidate = false;
                         mesArrayError.Add(msg ?? $"Thông tin {displayName.DisplayName} vượt quá {length} độ dài cho phép");
                         _serviceResult.MISACode = Enums.MISACode.NotValid;
-                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+                        _serviceResult.Messenger = Properties.Resources.Msg_NotValidData;
                     }
                 }
                 if (property.IsDefined(typeof(Email), false)) {
+                    //Check đúng định dạng email
                     var validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
                                       + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
                                       + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
@@ -134,9 +159,9 @@ namespace MISA.ApplicationCore {
                     var check = regCheck.IsMatch(propertyValue.ToString().Trim());
                     if (!check) {
                         isValidate = false;
-                        mesArrayError.Add($"Email không đúng định dạng.");
+                        mesArrayError.Add(Properties.Resources.Msg_EmailTypeFail);
                         _serviceResult.MISACode = Enums.MISACode.NotValid;
-                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+                        _serviceResult.Messenger = Properties.Resources.Msg_NotValidData;
                     }
                 }
             }
@@ -152,6 +177,7 @@ namespace MISA.ApplicationCore {
         /// </summary>
         /// <param name="entity">Đối tượng object</param>
         /// <returns>true/false</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         protected virtual bool ValidateCustom(TEntity entity) {
             return true;
         }

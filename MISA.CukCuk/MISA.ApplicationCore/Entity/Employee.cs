@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -21,12 +22,14 @@ namespace MISA.ApplicationCore.Entity {
         /// Mã nhân viên
         /// </summary>
         [CheckDuplicate]
+        [Required]
         [DisplayName("mã khách hàng")]
         public string EmployeeCode { get; set; }
         /// <summary>
         /// Họ và tên khách hàng
         /// </summary>
         [Required]
+        [DisplayName("họ và tên")]
         public string FullName { get; set; }
         /// <summary>
         /// Ngày - tháng - năm sinh
@@ -40,16 +43,21 @@ namespace MISA.ApplicationCore.Entity {
         /// Email khách hàng
         /// </summary>
         [Email]
+        [Required]
+        [DisplayName("email")]
         public string Email { get; set; }
         /// <summary>
         /// Số điện thoại khách hàng
         /// </summary
         [CheckDuplicate]
+        [Required]
         [DisplayName("số điện thoại")]
         public string PhoneNumber { get; set; }
         /// <summary>
         /// Số chứng minh nhân dân
         /// </summary>
+        [Required]
+        [DisplayName("số chứng minh thư")]
         public string IdentityNumber { get; set; }
         /// <summary>
         /// Ngày cấp chứng minh nhân dân
@@ -92,6 +100,7 @@ namespace MISA.ApplicationCore.Entity {
         /// </summary>
         public string DepartmentName { get; set; }
         //public  MyProperty { get; set; }
+        public string LinkAvatar { get; set; }
         #endregion
 
         #region Method

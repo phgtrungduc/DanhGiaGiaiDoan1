@@ -8,6 +8,10 @@ using MISA.ApplicationCore.Entity;
 using MISA.ApplicationCore.Interfaces;
 
 namespace MISA.CukCuk.Web.Controllers {
+    /// <summary>
+    /// Controller lấy tất cả các vị trí
+    /// </summary>
+    /// CreatedBy:PTDuc(04/12/2020)
     public class PositionController : BaseEntityController<Position> {
         IPositionService _positionService;
         public PositionController(IPositionService positionService) : base(positionService) {

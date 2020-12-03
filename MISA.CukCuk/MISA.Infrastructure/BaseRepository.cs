@@ -19,14 +19,18 @@ namespace MISA.Infrastructure {
         String _connectionString = null;
         protected IDbConnection _dbConnection = null;
         #endregion
-
         public BaseRepository(IConfiguration configuration) {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
             _tableName =  typeof(TEntity).Name; 
         }
-
+        /// <summary>
+        /// Thêm đối tượng
+        /// </summary>
+        /// <param name="entity">Đối tượng truyền lên từ client</param>
+        /// <returns>Số lượng bản ghi bị ảnh hưởng</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public int Add(TEntity entity) {
             var rows = 0;
             _dbConnection.Open();
@@ -46,6 +50,12 @@ namespace MISA.Infrastructure {
             return rows;
         }
 
+        /// <summary>
+        /// Xóa đối tượng theo Id
+        /// </summary>
+        /// <param name="entityId">Id của đối tượng</param>
+        /// <returns>số lượng bản ghi bị ảnh hưởng</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public int Delete(Guid entityId) {
             var rows=0;
             _dbConnection.Open();
@@ -62,20 +72,36 @@ namespace MISA.Infrastructure {
             return rows;
         }
 
+
+        /// <summary>
+        /// Lấy tất cả các đối tượng
+        /// </summary>
+        /// <returns>List các đối tượng</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public IEnumerable<TEntity> GetEntities() {
             var entities = _dbConnection.Query<TEntity>($"Proc_Get{_tableName}", commandType: CommandType.StoredProcedure);//Chạy câu lệnh đầu query
             //Trả về dữ liệu
             return entities;
         }
 
-
+        /// <summary>
+        /// TÌm kiếm đối tượng theo id
+        /// </summary>
+        /// <param name="entityId">id của đối tượng</param>
+        /// <returns>List các đối tượng có id</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public TEntity GetEntityById(Guid entityId) {
             //Khởi tạo các commandtext, trả về thằng đầu tiên nếu có, nếu không trả về null
             var entities = _dbConnection.Query<TEntity>($"SELECT * FROM {_tableName} WHERE {_tableName}Id='{entityId}'", commandType: CommandType.Text).FirstOrDefault();//Chạy câu lệnh đầu query
             //Trả về dữ liệu
             return entities;
         }
-
+        /// <summary>
+        /// Update thông tin đối tượng
+        /// </summary>
+        /// <param name="entity">đối tượng với các thông tin cần update</param>
+        /// <returns>số lượng bản ghi bị ảnh hưởng </returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         public int Update(TEntity entity) {
             var rowAffects = 0;
             _dbConnection.Open();
@@ -96,6 +122,12 @@ namespace MISA.Infrastructure {
             return rowAffects;
         }
 
+        /// <summary>
+        /// Mapping dữ liệu để thêm vào database
+        /// </summary>
+        /// <param name="entity">đối tượng cần mapping</param>
+        /// <returns>đối tượng sau khi đã mapping</returns>
+        /// CreatedBy:PTDuc(04/12/2020)
         private DynamicParameters MappingDBType(TEntity entity) {
             var parameters = new DynamicParameters();
             var properties = entity.GetType().GetProperties();

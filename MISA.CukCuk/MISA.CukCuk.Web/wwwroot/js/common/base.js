@@ -21,6 +21,8 @@ class BaseJS {
     $("#btnSync").click(function () {
       self.loadData();
     });
+    //Sự kiện Khi ấn esc, thực hiện tắt các form thêm mới và alert
+    this.closePopUp();
 
     //gán datepicker cho các input date
     this.setDatePicker();
@@ -41,6 +43,8 @@ class BaseJS {
     // Sự kiện ấn nút thêm entity (customers,employees,...)
     this.addEntity();
 
+    //this.formatMoneyTyping();
+
     // ấn nút cancle hoặc ấn exit khỏi dialog thêm entity (customers,employees,...):
     this.hideDialog();
 
@@ -57,6 +61,36 @@ class BaseJS {
     this.checkEmail();
   }
 
+  // formatMoneyTyping(){
+  //   let temp ="";
+  //   let self = this;
+  //   $("#txtSalary").keyup(function () { 
+  //     let value = $(this).val();
+  //     if (value.length>3){
+  //       let money = self.formatMoney(value);
+  //       $(this).val(money);
+  //     }
+  //    });
+  // }
+
+  /**
+   * Khi ấn esc, thực hiện tắt các form thêm mới và alert
+   * createdBy:PTDuc(04/12/2020)
+   */
+  closePopUp(){
+    $(document).keydown(function(e) {
+      // ESCAPE key pressed
+      if (e.keyCode == 27) {
+        $(".include-content").hide();
+        $(".alert-delete").hide();
+      }
+  });
+  }
+
+  /**
+   * gán datepicker cho các input date
+   * createdBy:PTDuc(04/12/2020)
+   */
   setDatePicker() {
     let datepicker = $("[type='datepicker']");
     $(datepicker).datepicker({ dateFormat: "dd/mm/yy" });
@@ -65,6 +99,7 @@ class BaseJS {
    * Hiển thị thông báo
    * @param {string} content : Nội dung thông báo
    * @param {string} status : trạng thái thông báo
+   * createdBy:PTDuc(04/12/2020)
    */
   showNotification(content, status) {
     $(".notification").show();
@@ -92,6 +127,7 @@ class BaseJS {
   /**
    * Kiểm tra email truyền vào có đúng định dạng không
    * @param {string} email : email cần kiểm tra, truyền vào dạng string
+   * createdBy:PTDuc(04/12/2020)
    */
   validateEmail(email) {
     var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
@@ -119,7 +155,8 @@ class BaseJS {
     let self = this;
     $("#btnDelete").click(function (e) {
       if (self.deleteLink){
-        $(".alert-content").append(`Bạn có chắc chắn muốn xóa nhân viên ${self.entity} hay không?`);
+        $(".alert-content-title").empty();
+        $(".alert-content-title").append(`Bạn có chắc chắn muốn xóa nhân viên ${self.entity} hay không`);
         $(".alert-delete").show();
       }
       else {
@@ -139,7 +176,6 @@ class BaseJS {
     this.entity="";
     $("body").on("click", ".btn-cancle-alert,#btnCancleDelete", function () {
       $(".alert-delete").hide();
-      $(".alert-content").empty();
     });
   }
 
@@ -218,6 +254,7 @@ class BaseJS {
       try {
         // if (!$("#cbxCustomerGroup").children().length) self.renderComboBox();
         $(".include-content").show();
+        $("#txtCustomerCode").focus();
         let allInput = $("[inputField]");
         $(allInput).val(null);
         $("[inputField='EmployeeCode']").val(self.maxcode);
@@ -277,8 +314,10 @@ class BaseJS {
           }
         } else if ($(input).attr("type") === "money") {
           let inputField = $(input).attr("inputField");
-          let value = $(input).attr("MoneyValue");
-          entity[inputField] = value;
+          let value = $(input).val().trim();
+          let lengh = value.length;
+          let money = value.substring(0,lengh-5);
+          entity[inputField] = money.split(',').join("");
         } else if ($(input).attr("type") === "select") {
           let selectField = $(input).attr("selectField");
           let option = $(this).find("option:selected");
@@ -318,7 +357,6 @@ class BaseJS {
           contentType: "application/json",
         })
           .done(function (res) {
-            debugger
             // Sau khi lưu thành công thì:
             // + ẩn form chi tiết,
             if (self.method === "PUT") {
@@ -398,9 +436,7 @@ class BaseJS {
             } else if ($(input).attr("type") === "money") {
               let inputField = $(input).attr("inputField");
               let value = res[inputField];
-              $(input).attr("MoneyValue", value);
-              $(input).val(self.formatMoney(value) + " (VND)   ");
-              $(input).css("text-align", "right");
+              $(input).val(self.formatMoney(value.toString()) + "(VND)   ");
             } else if ($(input).attr("type") === "select") {
               let selectField = $(input).attr("selectField");
               let allOptions = $(this).find("option");
@@ -494,7 +530,7 @@ class BaseJS {
    */
   formatMoney(data) {
     if (data){
-      return data.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+      return data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     } // 12,345.67
     else {
       return "";
@@ -524,18 +560,17 @@ class BaseJS {
           let tr = $("<tr></tr>");
           $(tr).data("EmployeeCode", value.EmployeeCode);
           $(tr).data("EmployeeId", value.EmployeeId);
-          debugger
           $.each(ths, (ind, val) => {
             //duyệt qua hết các tất cả các cột để lấy các thuộc tính tương ứng
             var fieldName = $(val).attr("fieldName");
             var typeFormat = $(val).attr("formatType");
             var text_align = $(val).attr("class");
             var data = value[fieldName];
-            if (data) {
+            if (data!=null) {
               if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
                 data = self.formatDate(data, typeFormat);
               } else if (typeFormat === "money") {
-                data = self.formatMoney(data);
+                data = self.formatMoney(data.toString());
               } else {
                 data = self.customFormat(fieldName, data);
               }

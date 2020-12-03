@@ -1,9 +1,6 @@
 $(document).ready(function () {
   new EmployeeJS();
   $(".loading").show();
-  $(function () {
-    $("#datepicker").datepicker();
-  });
 });
 
 class EmployeeJS extends BaseJS {
@@ -16,6 +13,13 @@ class EmployeeJS extends BaseJS {
     super.initEvents();
     this.initFilter();
   }
+
+  /**
+   * Chuyển từ dữ liệu hiển thị sang dạng dữ liệu sẽ gửi lên server
+   * @param {*} fieldName : Tên trường
+   * @param {*} data : Giá trị của trường
+   * createdBy:PTDuc(04/12/2020)
+   */
   mappingData(fieldName, data) {
     if (fieldName === "Gender") {
       if (data === 0) {
@@ -36,15 +40,30 @@ class EmployeeJS extends BaseJS {
       }
     }
   }
+
+  /**
+   * Thực hiện format lại kiểu của một số trường không tồn tại tại base
+   * @param {string} fieldName :Tên trường cần format lại
+   * @param {*} data : giá trị của trường
+   * createdBy:PTDuc(04/12/2020)
+   */
   customFormat(fieldName, data) {
     if (fieldName === "Gender" || fieldName === "WorkStatus") {
       return this.mappingData(fieldName, data);
     } else return data;
   }
+  /**
+   * Sự kiện khi ấn vào nút thêm mới 
+   * createdBy:PTDuc(04/12/2020)
+   */
   addEntity() {
     this.getMaxEmployeeCode();
     super.addEntity();
   }
+  /**
+   * Lấy mã của nhân viên có mã lớn nhất hệ thống
+   * createdBy:PTDuc(04/12/2020)
+   */
   getMaxEmployeeCode() {
     let self = this;
     $.ajax({
@@ -55,6 +74,13 @@ class EmployeeJS extends BaseJS {
       },
     });
   }
+
+  /**
+   * Format cho đúng chuẩn định dạng mã nhân viên
+   * @param {string} employeeCode : mã nhân viên có mã lớn nhất lấy từ hệ thống
+   * Trả lại giá trị NV+(phần số +1)
+   * createdBy:PTDuc(04/12/2020)
+   */
   formatEmployeeCode(employeeCode) {
     let number = employeeCode.substring(2);
     number = parseInt(number);
@@ -63,26 +89,32 @@ class EmployeeJS extends BaseJS {
     return "NV" + fillNumber;
   }
   
+  /**
+   * Khởi tạo các sự kiện khi thay đổi các trường để filter
+   * createdBy:PTDuc(04/12/2020)
+   */
   initFilter(){
     let self = this;
-    $("select[selectfield=Department]").change(function(){self.filterEmployee()});
-    $("select[selectfield=Position]").change(function(){self.filterEmployee()});
+    $("cbxPosition").change(function(){self.filterEmployee()});
+    $("cbxDepartment").change(function(){self.filterEmployee()});
     $("input.search-another").blur(function(){self.filterEmployee()});
     
   }
+  /**
+   * Thực hiện tìm kiếm 
+   * createdBy:PTDuc(04/12/2020)
+   */
   filterEmployee() {
     let self = this;
     let specs = $("input.search-another").val().trim();
-    let selectPosition = $("select[selectfield=Position]");
+    let selectPosition = $("#cbxPosition");
     let optionPosition = $(selectPosition).find("option:selected");
     let valuePosition = $(optionPosition).attr("positionValue");
 
-    let selectDepartment = $("select[selectfield=Department]");
+    let selectDepartment = $("#cbxDepartment");
     let optionDepartment = $(selectDepartment).find("option:selected");
     let valueDepartment = $(optionDepartment).attr("departmentValue");
-
     this.param = `/filter?specs=${specs}&positionid=${valuePosition}&departmentId=${valueDepartment}`;
-    debugger
     this.loadData();
   }
 }

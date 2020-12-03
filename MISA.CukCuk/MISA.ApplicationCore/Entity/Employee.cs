@@ -90,6 +90,7 @@ namespace MISA.ApplicationCore.Entity {
         /// Tên phòng ban làm việc
         /// </summary>
         public string DepartmentName { get; set; }
+        //public  MyProperty { get; set; }
         #endregion
 
         #region Method

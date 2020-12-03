@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 namespace MISA.CukCuk.Web.Controllers {
     [Route("api/[controller]")]
-    public class ImageController : ControllerBase {
+    public class ImagesController : ControllerBase {
         public static IWebHostEnvironment _environment;
-        public ImageController(IWebHostEnvironment environment) {
+        public ImagesController(IWebHostEnvironment environment) {
             _environment = environment;
         }
         public class FIleUploadAPI {
@@ -16,30 +16,31 @@ namespace MISA.CukCuk.Web.Controllers {
                 get;
                 set;
             }
+            public string name { get; set; }
         }
         [HttpGet]
         public IActionResult Get() {
             return Ok("1");
         }
         [HttpPost]
-        public async Task<string> Post([FromForm] IFormFile file) {
-            if (file.Length > 0) {
+        public async Task<IActionResult> ImageUpload(FIleUploadAPI formUpload) {
+            if (formUpload.files.Length > 0) {
                 try {
                     if (!Directory.Exists(_environment.WebRootPath + "\\uploads\\")) {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\uploads\\");
                     }
-                    using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\uploads\\" + file.FileName)) {
-                        file.CopyTo(filestream);
+                    using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\uploads\\" + formUpload.files.FileName)) {
+                        formUpload.files.CopyTo(filestream);
                         filestream.Flush();
-                        return "\\uploads\\" + file.FileName;
+                        return Ok("\\uploads\\" + formUpload.files.FileName);
                     }
                 }
                 catch (Exception ex) {
-                    return ex.ToString();
+                    return BadRequest(ex.ToString());
                 }
             }
             else {
-                return "Unsuccessful";
+                return BadRequest("Unsuccessful");
             }
         }
     }

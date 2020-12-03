@@ -76,6 +76,62 @@
         </Column>
       </Columns>
     </Table>
+    <Table Name="CustomSequence">
+      <Checked>false</Checked>
+      <Settings>
+        <Truncate>true</Truncate>
+        <RowsToGenerate>0</RowsToGenerate>
+        <PopulationDetails>
+          <PopulationType>RowsCount</PopulationType>
+          <RowsCount>1000</RowsCount>
+          <LookupProportion>30</LookupProportion>
+          <ProportionOfExistingData>10</ProportionOfExistingData>
+          <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
+        </PopulationDetails>
+      </Settings>
+      <Columns>
+        <Column Name="next_not_cached_value">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="minimum_value">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="maximum_value">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="start_value">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="increment">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="cache_size">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+        <Column Name="cycle_option">
+          <Checked>false</Checked>
+          <DataType>BOOL</DataType>
+          <Precision>1</Precision>
+        </Column>
+        <Column Name="cycle_count">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>21</Precision>
+        </Column>
+      </Columns>
+    </Table>
     <Table Name="Department">
       <Checked>true</Checked>
       <Settings>
@@ -196,66 +252,15 @@
         </PopulationDetails>
       </Settings>
       <Columns>
-        <Column Name="Value">
+        <Column Name="ID">
           <Checked>false</Checked>
-          <DataType>BIT</DataType>
-          <Precision>1</Precision>
+          <DataType>CHAR</DataType>
+          <Length>36</Length>
         </Column>
-      </Columns>
-    </Table>
-    <Table Name="TrungDucSequence">
-      <Checked>false</Checked>
-      <Settings>
-        <Truncate>true</Truncate>
-        <RowsToGenerate>0</RowsToGenerate>
-        <PopulationDetails>
-          <PopulationType>RowsCount</PopulationType>
-          <RowsCount>1000</RowsCount>
-          <LookupProportion>30</LookupProportion>
-          <ProportionOfExistingData>10</ProportionOfExistingData>
-          <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
-        </PopulationDetails>
-      </Settings>
-      <Columns>
-        <Column Name="next_not_cached_value">
+        <Column Name="Name">
           <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="minimum_value">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="maximum_value">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="start_value">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="increment">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="cache_size">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
-        </Column>
-        <Column Name="cycle_option">
-          <Checked>false</Checked>
-          <DataType>BOOL</DataType>
-          <Precision>1</Precision>
-        </Column>
-        <Column Name="cycle_count">
-          <Checked>false</Checked>
-          <DataType>BIGINT</DataType>
-          <Precision>21</Precision>
+          <DataType>CHAR</DataType>
+          <Length>255</Length>
         </Column>
       </Columns>
     </Table>
@@ -928,6 +933,25 @@
           <GeneratorDescription>references a column from parent table</GeneratorDescription>
           <HasForeignKey>true</HasForeignKey>
           <Length>36</Length>
+        </Column>
+        <Column Name="LinkAvatar">
+          <Checked>true</Checked>
+          <DataType>VARCHAR</DataType>
+          <GeneratorOptions xsi:type="MySqlRegularExpressionGeneratorOptions">
+            <AllowEmptyStrings>false</AllowEmptyStrings>
+            <EmptyStringProportion>10</EmptyStringProportion>
+            <AllowNulls>false</AllowNulls>
+            <NullProportion>10</NullProportion>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
+            <SeedValue>13</SeedValue>
+            <Unique>false</Unique>
+            <IsAlwaysUnique>false</IsAlwaysUnique>
+            <Expression>default.jpg</Expression>
+          </GeneratorOptions>
+          <GeneratorType>MySqlStringRegularExpressionGenerator</GeneratorType>
+          <GeneratorName>Reg Exp</GeneratorName>
+          <GeneratorDescription>values based on a regular expression</GeneratorDescription>
+          <Length>255</Length>
         </Column>
       </Columns>
     </Table>

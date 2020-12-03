@@ -107,6 +107,8 @@ class BaseJS {
     $("table tbody").on("click", "tr", function () {
       $(garbage).show();
       self.deleteLink = $(this).data("EmployeeId");
+      $(this).css("background-color", "#bbbbbb");
+      $(this).siblings().css("background-color", "transparent");
     });
   }
   /**
@@ -176,7 +178,6 @@ class BaseJS {
 
     var comboBoxs = $("select[notLoaded]");
     //show màn hình chờ cho người dùng biết đang load dữ liệu
-    $(".loading").show();
     //Lấy dữ liệu nhóm khách hàng
     $.each(comboBoxs, function (index, comboBox) {
       let selectField = $(comboBox).attr("selectField");
@@ -186,9 +187,8 @@ class BaseJS {
       })
         .done((res) => {
           $.each(res, function (index, value) {
-            let option = `<option ${selectField}Value="${
-              value[selectField + "Id"]
-            }" >${value[selectField + "Name"]}</option>`;
+            let option = `<option ${selectField}Value="${value[selectField + "Id"]
+              }" >${value[selectField + "Name"]}</option>`;
             $(comboBox).append(option);
           });
         })
@@ -196,7 +196,6 @@ class BaseJS {
           console.log(e);
         });
     });
-    $(".loading").hide();
   }
 
   /**
@@ -488,7 +487,7 @@ class BaseJS {
   }
   loadData() {
     //show màn hình chờ cho người dùng biết đang load dữ liệu
-    
+
     $(".loading").show();
     //Lấy thông tin các cột dữ liệu
     try {
@@ -500,16 +499,14 @@ class BaseJS {
         fieldName.push();
       });
       //Map dữ liệu lên UI
-      let count =0;
+      let count = 0;
       $.ajax({
         type: "GET",
-        url: self.host + self.router+self.param,
-        async: false,
+        url: self.host + self.router + self.param,
+        async: true,
       }).done((res) => {
         $.each(res, function (index, value) {
           //value là một object employee trả về
-          let leng = res.length;
-          count++;
           let tr = $("<tr></tr>");
           $(tr).data("EmployeeId", value.EmployeeId);
           $.each(ths, (ind, val) => {
@@ -534,8 +531,7 @@ class BaseJS {
             $(".table-content").first().append(tr);
             $(".table-content").first().append(tr);
           });
-          if (count===leng) $(".loading").hide();
-          debugger
+          $(".loading").hide();
         });
       });
     } catch (error) {

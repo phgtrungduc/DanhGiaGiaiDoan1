@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
+  
   new EmployeeJS();
+  $(".loading").show();
   $( function() {
     $( "#datepicker" ).datepicker();
   } );

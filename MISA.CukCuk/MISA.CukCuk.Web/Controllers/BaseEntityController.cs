@@ -49,7 +49,7 @@ namespace MISA.CukCuk.Web.Controllers {
             //Check trùng mã
             var serviceResult = _baseService.Add(entity);
             if (serviceResult.MISACode == MISACode.NotValid) {
-                return Ok(serviceResult);
+                return BadRequest(serviceResult);
             }
             else {
                 return Ok(serviceResult);

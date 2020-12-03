@@ -24,7 +24,7 @@ namespace MISA.CukCuk.Web.Controllers {
                 return base.Get(department, position);
             }
             else if (department != null) {
-                var employees=  _employeeService.GetEmployeeByProperty("Department", department);
+                var employees = _employeeService.GetEmployeeByProperty("Department", department);
                 return Ok(employees);
             }
             else {
@@ -32,6 +32,7 @@ namespace MISA.CukCuk.Web.Controllers {
                 return Ok(employees);
             }
         }
+
         [HttpGet("a/b/c/maxcode")]
         public IActionResult Get() {
             var maxEmployeeCode = _employeeService.GetMaxEmployeeCode();

@@ -18,6 +18,10 @@ namespace MISA.ApplicationCore.Entity {
 
     }
     [AttributeUsage(AttributeTargets.Property)]
+    public class Email : Attribute {
+
+    }
+    [AttributeUsage(AttributeTargets.Property)]
     public class MaxLength : Attribute {
         public int Value { get; set; }
         public string ErrorMsg { get; set; }

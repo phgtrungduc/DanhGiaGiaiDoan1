@@ -5,6 +5,7 @@ class BaseJS {
     this.method = "";
     this.maxcode = "";
     this.param = "";
+    this.entity = "";
     this.initEvents();
     //method là PUT hoặc POST ứng với kiểu sửa hoặc thêm entity
   }
@@ -17,7 +18,7 @@ class BaseJS {
   initEvents() {
     var self = this;
     //Load lại dữ liệu khi ấn nút sync
-    $(".sync-m-btn").click(function () {
+    $("#btnSync").click(function () {
       self.loadData();
     });
 
@@ -102,11 +103,10 @@ class BaseJS {
    * Created by: PTDuc(18/11/2020)
    */
   clickRowTable() {
-    let garbage = $("#btnDelete");
     let self = this;
     $("table tbody").on("click", "tr", function () {
-      $(garbage).show();
       self.deleteLink = $(this).data("EmployeeId");
+      self.entity = $(this).data("EmployeeCode");
       $(this).css("background-color", "#bbbbbb");
       $(this).siblings().css("background-color", "transparent");
     });
@@ -118,8 +118,14 @@ class BaseJS {
   deleteRow() {
     let self = this;
     $("#btnDelete").click(function (e) {
-      console.log(self.deleteLink);
-      $(".alert-delete").show();
+      if (self.deleteLink){
+        $(".alert-content").append(`Bạn có chắc chắn muốn xóa nhân viên ${self.entity} hay không?`);
+        $(".alert-delete").show();
+      }
+      else {
+        self.showNotification("Chưa chọn nhân viên muốn xóa","fail");
+      }
+      
     });
   }
 
@@ -128,10 +134,12 @@ class BaseJS {
    * Created by: PTDuc(18/11/2020)
    */
   cancleDelete() {
+    let self = this;
     this.deleteLink = "";
+    this.entity="";
     $("body").on("click", ".btn-cancle-alert,#btnCancleDelete", function () {
       $(".alert-delete").hide();
-      $("#btnDelete").hide();
+      $(".alert-content").empty();
     });
   }
 
@@ -154,16 +162,16 @@ class BaseJS {
           //Xóa thành công sẽ hiển thị thông báo thành công
           self.showNotification("Xóa thành công", "success");
           self.deleteLink = "";
+          self.entity="";
           //Load lại dữ liệu trên trang chủ
           self.loadData();
-          $("#btnDelete").hide();
         })
         .fail(function (e) {
           $(".alert-delete").hide();
           //Xóa không thành công cũng sẽ hiển thị thông báo thất bại
           self.showNotification("Xóa thất bại", "fail");
           self.deleteLink = "";
-          $("#btnDelete").hide();
+          self.entity=""; 
         });
     });
   }
@@ -187,8 +195,9 @@ class BaseJS {
       })
         .done((res) => {
           $.each(res, function (index, value) {
-            let option = `<option ${selectField}Value="${value[selectField + "Id"]
-              }" >${value[selectField + "Name"]}</option>`;
+            let option = `<option ${selectField}Value="${
+              value[selectField + "Id"]
+            }" selecte>${value[selectField + "Name"]}</option>`;
             $(comboBox).append(option);
           });
         })
@@ -290,6 +299,10 @@ class BaseJS {
       if (self.method === "PUT") {
         entity.EmployeeId = self.EmployeeId;
       }
+      if (self.method === "POST") {
+        entity.CreatedDate = new Date();
+      }
+
       let url =
         self.host +
         self.router +
@@ -305,49 +318,43 @@ class BaseJS {
           contentType: "application/json",
         })
           .done(function (res) {
+            debugger
             // Sau khi lưu thành công thì:
             // + ẩn form chi tiết,
-            console.log(res.Data);
             if (self.method === "PUT") {
               // + đưa ra thông báo thành công
               $(".loading").hide();
+              $(".include-content").hide();
               self.showNotification("Sửa thông tin thành công", "success");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thành công
               $(".loading").hide();
 
-              if (res.MISACode === 900) {
-                let error = "";
-                let errorLength = res.Data.length;
-                for (let i = 0; i < errorLength; i++) {
-                  if (i != 0) {
-                    error += ", " + res.Data[i];
-                  } else {
-                    error += res.Data[i];
-                  }
-                }
-                self.showNotification(error, "fail");
-              } else {
-                $(".include-content").hide();
-                self.showNotification("Thêm khách hàng thành công", "success");
-              }
+              $(".include-content").hide();
+              self.showNotification("Thêm khách hàng thành công", "success");
+              
             }
 
             // + load lại lại dữ liệu
             self.loadData();
           })
           .fail(function (e) {
+            let error = "";
+            let errorServer = e.responseJSON.Data;
+            $.each(errorServer, function (index, value) { 
+               error +=value;
+            });
             if (self.method === "PUT") {
               // + đưa ra thông báo thất bại
               $(".loading").hide();
-              self.showNotification("Sửa thông tin thất bại", "fail");
+              self.showNotification("Sửa thông tin thất bại."+error, "fail");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thất bại
               $(".loading").hide();
-              self.showNotification("Thêm khách thất bại", "fail");
+              self.showNotification("Thêm khách thất bại."+error, "fail");
             }
 
-            console.log(e);
+            //console.log(e.Data);
           });
       }
     });
@@ -473,6 +480,9 @@ class BaseJS {
       case "mmddyyyy":
         return month + "/" + day + "/" + year;
         break;
+      case "db": {
+        return year + "-" + month + "-" + day;
+      }
       default:
         return "";
     }
@@ -483,7 +493,12 @@ class BaseJS {
    * @param {string} data : data là giá trị cần định dạng tiền tệ
    */
   formatMoney(data) {
-    return data.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1."); // 12,345.67
+    if (data){
+      return data.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    } // 12,345.67
+    else {
+      return "";
+    }
   }
   loadData() {
     //show màn hình chờ cho người dùng biết đang load dữ liệu
@@ -499,7 +514,6 @@ class BaseJS {
         fieldName.push();
       });
       //Map dữ liệu lên UI
-      let count = 0;
       $.ajax({
         type: "GET",
         url: self.host + self.router + self.param,
@@ -508,7 +522,9 @@ class BaseJS {
         $.each(res, function (index, value) {
           //value là một object employee trả về
           let tr = $("<tr></tr>");
+          $(tr).data("EmployeeCode", value.EmployeeCode);
           $(tr).data("EmployeeId", value.EmployeeId);
+          debugger
           $.each(ths, (ind, val) => {
             //duyệt qua hết các tất cả các cột để lấy các thuộc tính tương ứng
             var fieldName = $(val).attr("fieldName");

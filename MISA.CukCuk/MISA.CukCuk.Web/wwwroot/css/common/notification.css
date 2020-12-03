@@ -7,6 +7,7 @@
   display: flex;
 }
 .notification {
+  width: 300px;
   align-items: center;
   border-radius: 4px;
   font-size: 13px;
@@ -15,7 +16,8 @@
   display: flex;
   margin-left: 5px;
   animation-name: notification;/*Xử lí animation cho các thông báo chỉ xuất hiện rồi dần tự mờ đi, người dùng không cần kick*/
-  animation-duration: 8s;
+  animation-duration: 10s;
+  word-wrap: break-word;
   opacity: 0;
 }
 @keyframes notification {
@@ -36,7 +38,7 @@
   width: 24px;
   height: 24px;
   padding-right: 8px;
-
+  margin-right: 5px;
   background-repeat: no-repeat;
 }
 .notification-icon-danger {

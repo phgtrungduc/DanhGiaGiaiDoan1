@@ -1,7 +1,7 @@
 /* css cho riêng phần loading */
 
 .loading {
-  position: realtive;
+  position: fixed;
   z-index: 100;
   background-color: black;
   opacity: 0.8;
@@ -34,8 +34,7 @@
 
 .lds-roller {
   background-color: antiquewhite;
-  display: inline-block;
-  position: fixed;
+  position: absolute;
   top: calc((100vh - 152px) / 2);
   left: calc((100vw - 152px) / 2);
 }

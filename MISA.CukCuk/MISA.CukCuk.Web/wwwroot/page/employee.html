@@ -127,10 +127,10 @@
                         </div>
                         <select name="Abc" id="cbxDepartment" selectField="Department" resField="DepartmentId"
                             notLoaded>
-                            <option value="" selected style="width: 200px;" departmentValue="all">Tất cả phòng ban</option>
+                            <option value="" selected style="width: 200px;" departmentValue="">Tất cả phòng ban</option>
                         </select>
                         <select name="Abc" id="cbxPosition" selectField="Position" resField="PositionId" notLoaded>
-                            <option value="" selected style="width: 200px;" positionValue="all">Tất cả vị trí</option>
+                            <option value="" selected style="width: 200px;" positionValue="">Tất cả vị trí</option>
                         </select>
                     </div>
                     <div class="right">
@@ -438,15 +438,15 @@
                 </div>
             </div>
             <div class="alert-content">
-                Bạn có chắc sẽ xóa không?
+                
             </div>
             <div class="alert-footer" style="float: right;">
                 <div class="btn-alert m-flex">
-                    <button class="m-btn m-btn-cancel" style="margin-right: 8px;" id="btnCancleDelete">
-                        Hủy
+                    <button class="m-btn m-btn-cancel second-button" style="margin-right: 8px;" id="btnCancleDelete">
+                        Không
                     </button>
-                    <button class="m-btn m-btn-default m-btn-delete" id="btnConfirmDelete">
-                        Xác nhận
+                    <button class="m-btn m-btn-default m-btn-delete primary-button" id="btnConfirmDelete">
+                        Có
                     </button>
                 </div>
             </div>
@@ -456,7 +456,7 @@
     
     <!-- phần hiển thị thông báo thêm, sửa, xóa thành công hay thất bại -->
     <div class="notification-group">
-
+        
     </div>
     <div class="loading"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
     <script src="/js/common/main.js"></script>

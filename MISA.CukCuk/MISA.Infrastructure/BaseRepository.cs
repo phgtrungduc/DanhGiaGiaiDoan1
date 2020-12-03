@@ -38,7 +38,8 @@ namespace MISA.Infrastructure {
                     //Trả lại số bản
                     transaction.Commit();
                 }
-                catch (Exception) {
+                catch (Exception e) {
+                    System.Diagnostics.Debug.Write(e.Message);
                     transaction.Rollback();
                 }
             }

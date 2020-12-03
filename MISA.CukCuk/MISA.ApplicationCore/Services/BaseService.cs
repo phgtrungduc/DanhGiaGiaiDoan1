@@ -7,9 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MISA.ApplicationCore {
-    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity:BaseEntity{
+    public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity {
         IBaseRepository<TEntity> _baseRepository;
         protected ServiceResult _serviceResult;
         #region Constructor
@@ -22,11 +23,21 @@ namespace MISA.ApplicationCore {
         public virtual ServiceResult Add(TEntity entity) {
             entity.EntityState = Enums.EntityState.AddNew;
             // Thực hiện validate:
+
             var isValidate = Validate(entity);
             if (isValidate == true) {
-                _serviceResult.Messenger = "Thêm thành công";
-                _serviceResult.Data = _baseRepository.Add(entity);
-                _serviceResult.MISACode = Enums.MISACode.IsValid;
+                var row = _baseRepository.Add(entity);
+                if (row != 0) {
+                    _serviceResult.Messenger = "Thêm thành công";
+                    _serviceResult.Data = row;
+                    _serviceResult.MISACode = Enums.MISACode.IsValid;
+                }
+                else {
+                    _serviceResult.Messenger = "Thêm thất bại " + _serviceResult.Messenger;
+                    _serviceResult.Data = row;
+                    _serviceResult.MISACode = Enums.MISACode.NotValid;
+                }
+
                 return _serviceResult;
             }
             else {
@@ -110,7 +121,20 @@ namespace MISA.ApplicationCore {
                     var msg = (attributeMaxLength as MaxLength).ErrorMsg;
                     if (propertyValue.ToString().Trim().Length > length) {
                         isValidate = false;
-                        mesArrayError.Add(msg??$"Thông tin {displayName.DisplayName} vượt quá {length} độ dài cho phép");
+                        mesArrayError.Add(msg ?? $"Thông tin {displayName.DisplayName} vượt quá {length} độ dài cho phép");
+                        _serviceResult.MISACode = Enums.MISACode.NotValid;
+                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+                    }
+                }
+                if (property.IsDefined(typeof(Email), false)) {
+                    var validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
+                                      + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
+                                      + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+                    var regCheck = new Regex(validEmailPattern, RegexOptions.IgnoreCase);
+                    var check = regCheck.IsMatch(propertyValue.ToString().Trim());
+                    if (!check) {
+                        isValidate = false;
+                        mesArrayError.Add($"Email không đúng định dạng.");
                         _serviceResult.MISACode = Enums.MISACode.NotValid;
                         _serviceResult.Messenger = "Dữ liệu không hợp lệ";
                     }

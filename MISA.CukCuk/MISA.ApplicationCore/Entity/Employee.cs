@@ -39,6 +39,7 @@ namespace MISA.ApplicationCore.Entity {
         /// <summary>
         /// Email khách hàng
         /// </summary>
+        [Email]
         public string Email { get; set; }
         /// <summary>
         /// Số điện thoại khách hàng

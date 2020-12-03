@@ -1,25 +1,20 @@
-
 $(document).ready(function () {
-  
   new EmployeeJS();
   $(".loading").show();
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
+  $(function () {
+    $("#datepicker").datepicker();
+  });
 });
 
 class EmployeeJS extends BaseJS {
   constructor() {
     super();
     this.router = "employee";
-    this.searchValue="";
     this.loadData();
   }
-  initEvents(){
+  initEvents() {
     super.initEvents();
-    this.filterByPosition();
-    this.filterByDepartment();
-    this.filterByAnother();
+    this.initFilter();
   }
   mappingData(fieldName, data) {
     if (fieldName === "Gender") {
@@ -46,75 +41,48 @@ class EmployeeJS extends BaseJS {
       return this.mappingData(fieldName, data);
     } else return data;
   }
-  addEntity(){
+  addEntity() {
     this.getMaxEmployeeCode();
     super.addEntity();
   }
-  getMaxEmployeeCode(){
+  getMaxEmployeeCode() {
     let self = this;
     $.ajax({
       type: "GET",
-      url: self.host+"employee/a/b/c/maxcode",
+      url: self.host + "employee/filter/maxcode",
       success: function (response) {
         self.maxcode = self.formatEmployeeCode(response);
-      }
+      },
     });
   }
-  formatEmployeeCode(employeeCode){
+  formatEmployeeCode(employeeCode) {
     let number = employeeCode.substring(2);
     number = parseInt(number);
     number++;
-    let fillNumber = number.toString().padStart(6,'0');
-    return "NV"+fillNumber;
+    let fillNumber = number.toString().padStart(6, "0");
+    return "NV" + fillNumber;
   }
-  filterByPosition(){
+  
+  initFilter(){
     let self = this;
-    $("select[selectfield=Position]").change(function() { 
-      let option = $(this).find("option:selected");
-      let resField = $(this).attr("resField");
-      let value = $(option).attr("positionValue");
-      if (value==="all"){
-        self.param="";
-        self.loadData();
-      }
-      else {
-        self.param = `?position=${value}`;
-        self.loadData();
-      }
-    });
+    $("select[selectfield=Department]").change(function(){self.filterEmployee()});
+    $("select[selectfield=Position]").change(function(){self.filterEmployee()});
+    $("input.search-another").blur(function(){self.filterEmployee()});
+    
   }
-  filterByDepartment(){
+  filterEmployee() {
     let self = this;
-    $("select[selectfield=Department]").change(function() { 
-      let option = $(this).find("option:selected");
-      let resField = $(this).attr("resField");
-      let value = $(option).attr("departmentValue");
-      if (value==="all"){
-        self.param="";
-        self.loadData();
-      }
-      else {
-        self.param = `?department=${value}`;
-        self.loadData();
-      }
-    });
-  }
-  filterByAnother(){
-    let self = this;
-    $("input.search-another").blur(function(){ 
-      let value = $(this).val().trim();
-      if (self.searchValue!==value){
-        if (value==null||value===""){
-          self.param="";
-          
-          self.loadData();
-        }
-        else {
-          self.param=`/search/${value}`;
-          self.loadData();
-        }
-      }
-      
-    });
+    let specs = $("input.search-another").val().trim();
+    let selectPosition = $("select[selectfield=Position]");
+    let optionPosition = $(selectPosition).find("option:selected");
+    let valuePosition = $(optionPosition).attr("positionValue");
+
+    let selectDepartment = $("select[selectfield=Department]");
+    let optionDepartment = $(selectDepartment).find("option:selected");
+    let valueDepartment = $(optionDepartment).attr("departmentValue");
+
+    this.param = `/filter?specs=${specs}&positionid=${valuePosition}&departmentId=${valueDepartment}`;
+    debugger
+    this.loadData();
   }
 }

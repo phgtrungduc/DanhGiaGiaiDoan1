@@ -6,8 +6,7 @@ using System.Text;
 
 namespace MISA.ApplicationCore.Interfaces {
     public interface IEmployeeService:IBaseService<Employee> {
-        IEnumerable<Employee> SearchEmployee(string param);
-        IEnumerable<Employee> GetEmployeeByProperty(string property, string value);
         string GetMaxEmployeeCode();
+        IEnumerable<Employee> GetEmployeeByFilter(string specs, string DepartmentId, string PositionId);
     }
 }

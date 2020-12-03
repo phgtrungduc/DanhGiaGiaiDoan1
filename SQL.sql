@@ -65,4 +65,19 @@ SET @CODE = (CAST((SELECT SUBSTRING(MAX(EmployeeCode),3,8)  AS maulon FROM Emplo
   INSERT INTO Employee 
    VALUES("11acd342-735a-6bbe-73de-23e1777799",@CODE   , "Duc", 1,"2010-01-12", "p@gmail.com",
   "03636265455", "113717558", "2010-01-12", "Ha Noi", "2010-01-12", "525845145", "5654555", 1, "6123f364-3fd4-3ffe-3e6b-1629b83affd2", "75cce5a6-4f7f-3671-3cf3-eb0223d0a4f7");
-  CALL Proc_SearchEmployee("Mạnh");
+  CALL Proc_SearchEmployee("0105");
+
+  SELECT
+    *
+  FROM Employee e,
+       Department d,
+       `Position` p
+  WHERE e.DepartmentId = d.DepartmentId
+  AND e.PositionId = p.PositionId
+  AND ( e.FullName LIKE '%Mạnh%'
+  or e.EmployeeCode like '%Mạnh%'
+  or e.PhoneNumber like '%Mạnh%');
+
+  CALL Proc_GetEmployeeByPosition("6123f364-3fd4-3ffe-3e6b-1629b83affd2");
+
+  SELECT MAX(EmployeeCode) FROM Employee

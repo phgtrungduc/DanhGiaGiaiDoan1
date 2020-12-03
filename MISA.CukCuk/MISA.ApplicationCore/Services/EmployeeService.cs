@@ -12,17 +12,14 @@ namespace MISA.ApplicationCore.Services {
             _employeeRepository = employeeRepository;
         }
 
-        public IEnumerable<Employee> GetEmployeeByProperty(string property, string value) {
-            return _employeeRepository.GetEmployeeByProperty(property,value);
+        public IEnumerable<Employee> GetEmployeeByFilter(string specs, string DepartmentId, string PositionId) {
+            return _employeeRepository.GetEmployeeByFilter(specs,DepartmentId,PositionId);
         }
 
         public string GetMaxEmployeeCode() {
             return _employeeRepository.GetMaxEmployeeCode();
         }
 
-        public IEnumerable<Employee> SearchEmployee(string param) {
-            return _employeeRepository.SearchEmployee(param);
-        }
         #endregion
     }
 }

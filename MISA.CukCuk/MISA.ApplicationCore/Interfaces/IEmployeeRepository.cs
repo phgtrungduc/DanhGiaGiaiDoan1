@@ -13,8 +13,7 @@ namespace MISA.ApplicationCore.Interfaces {
         /// <param name="">mã nhân viên</param>
         /// <returns></returns>
         Employee GetEmployeeByCode(string employeeCode);
-        IEnumerable<Employee> SearchEmployee(string param);
-        IEnumerable<Employee> GetEmployeeByProperty(string property,string value);
         string GetMaxEmployeeCode();
+        IEnumerable<Employee> GetEmployeeByFilter(string specs,string DepartmentId,string PositionId);
     }
 }

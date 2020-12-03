@@ -13,29 +13,15 @@ namespace MISA.CukCuk.Web.Controllers {
         public EmployeeController(IEmployeeService employeeService) : base(employeeService) {
             _employeeService = employeeService;
         }
-        [HttpGet("search/{param}")]
-        public IActionResult Get([FromRoute] string param) {
-            var employee = _employeeService.SearchEmployee(param);
-            return Ok(employee);
-        }
-        public override IActionResult Get(string department, string position) {
-            if (department == null & position == null) {
 
-                return base.Get(department, position);
-            }
-            else if (department != null) {
-                var employees = _employeeService.GetEmployeeByProperty("Department", department);
-                return Ok(employees);
-            }
-            else {
-                var employees = _employeeService.GetEmployeeByProperty("Position", position);
-                return Ok(employees);
-            }
-        }
-
-        [HttpGet("a/b/c/maxcode")]
+        [HttpGet("filter/maxcode")]
         public IActionResult Get() {
             var maxEmployeeCode = _employeeService.GetMaxEmployeeCode();
+            return Ok(maxEmployeeCode);
+        }
+        [HttpGet("filter")]
+        public IActionResult GetEmployeeByFilter([FromQuery]string specs, [FromQuery] string DepartmentId, [FromQuery] string PositionId) {
+            var maxEmployeeCode = _employeeService.GetEmployeeByFilter(specs, DepartmentId, PositionId);
             return Ok(maxEmployeeCode);
         }
     }

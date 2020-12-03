@@ -21,15 +21,14 @@ namespace MISA.Infrastructure {
             return employee;
         }
 
-        public IEnumerable<Employee> GetEmployeeByProperty(string property, string value) {
-            //var queryString = $"SELECT * FROM Employee e, Department d, Position p WHERE e.DepartmentId = d.DepartmentId AND e.PositionId = p.PositionId AND e.{property}Id = '{value}'; ";
-            //var employee = _dbConnection.Query<Employee>(queryString);
-            var employee;
-            if (property == "Department") {
-                employee = _dbConnection.Query<Employee>($"Proc_Get{_tableName}By{property}", new { DepartmentId = value }, commandType: CommandType.StoredProcedure);
-            }
-            else 
-            
+        public IEnumerable<Employee> GetEmployeeByFilter(string specs, string DepartmentId, string PositionId) {
+            var parameters = new DynamicParameters();
+            parameters.Add("@EmployeeCode",specs??String.Empty);
+            parameters.Add("@FullName",specs??String.Empty);
+            parameters.Add("@PhoneNumber",specs??String.Empty);
+            parameters.Add("@DepartmentId",DepartmentId);
+            parameters.Add("@PositionId", PositionId);
+            var employee = _dbConnection.Query<Employee>("Proc_GetEmployeeByFilter",parameters,commandType:CommandType.StoredProcedure);
             return employee;
         }
 
@@ -38,9 +37,5 @@ namespace MISA.Infrastructure {
             return maxEmployeeCode.ToString();
         }
 
-        public IEnumerable<Employee> SearchEmployee(string param) {
-            var employee = _dbConnection.Query<Employee>("Proc_SearchEmployee", new { param }, commandType: CommandType.StoredProcedure);
-            return employee;
-        }
     }
 }

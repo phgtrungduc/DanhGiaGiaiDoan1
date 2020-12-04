@@ -43,7 +43,7 @@ class BaseJS {
     // Sự kiện ấn nút thêm entity (customers,employees,...)
     this.addEntity();
 
-    //this.formatMoneyTyping();
+    this.formatMoneyTyping();
 
     // ấn nút cancle hoặc ấn exit khỏi dialog thêm entity (customers,employees,...):
     this.hideDialog();
@@ -61,30 +61,45 @@ class BaseJS {
     this.checkEmail();
   }
 
-  // formatMoneyTyping(){
-  //   let temp ="";
-  //   let self = this;
-  //   $("#txtSalary").keyup(function () { 
-  //     let value = $(this).val();
-  //     if (value.length>3){
-  //       let money = self.formatMoney(value);
-  //       $(this).val(money);
-  //     }
-  //    });
-  // }
+  formatMoneyTyping() {
+    let self = this;
+    $("#txtSalary").on("input", function () {
+      let value = $(this).val();
+      let lengthOfValue = value.length;
+      let money = "";
+
+      if (value.includes("(VND)")) {
+        money = value.substring(0, lengthOfValue - 5);
+      } else {
+        money = value;
+      }
+      money = money.split(",").join("");
+      let lengthOfMoney = money.length;
+      for (let i = 1; i < lengthOfMoney; i++) {
+        $(this).val(self.formatMoney(money));
+        
+      }
+    });
+    $("#txtSalary").blur(function () {
+      let value = $(this).val();
+      if (!value.includes("(VND)")) {
+        $(this).val(value + "(VND)");
+      }
+    });
+  }
 
   /**
    * Khi ấn esc, thực hiện tắt các form thêm mới và alert
    * createdBy:PTDuc(04/12/2020)
    */
-  closePopUp(){
-    $(document).keydown(function(e) {
+  closePopUp() {
+    $(document).keydown(function (e) {
       // ESCAPE key pressed
       if (e.keyCode == 27) {
         $(".include-content").hide();
         $(".alert-delete").hide();
       }
-  });
+    });
   }
 
   /**
@@ -154,15 +169,15 @@ class BaseJS {
   deleteRow() {
     let self = this;
     $("#btnDelete").click(function (e) {
-      if (self.deleteLink){
+      if (self.deleteLink) {
         $(".alert-content-title").empty();
-        $(".alert-content-title").append(`Bạn có chắc chắn muốn xóa nhân viên ${self.entity} hay không`);
+        $(".alert-content-title").append(
+          `Bạn có chắc chắn muốn xóa nhân viên ${self.entity} hay không`
+        );
         $(".alert-delete").show();
+      } else {
+        self.showNotification("Chưa chọn nhân viên muốn xóa", "fail");
       }
-      else {
-        self.showNotification("Chưa chọn nhân viên muốn xóa","fail");
-      }
-      
     });
   }
 
@@ -173,7 +188,7 @@ class BaseJS {
   cancleDelete() {
     let self = this;
     this.deleteLink = "";
-    this.entity="";
+    this.entity = "";
     $("body").on("click", ".btn-cancle-alert,#btnCancleDelete", function () {
       $(".alert-delete").hide();
     });
@@ -198,7 +213,7 @@ class BaseJS {
           //Xóa thành công sẽ hiển thị thông báo thành công
           self.showNotification("Xóa thành công", "success");
           self.deleteLink = "";
-          self.entity="";
+          self.entity = "";
           //Load lại dữ liệu trên trang chủ
           self.loadData();
         })
@@ -207,7 +222,7 @@ class BaseJS {
           //Xóa không thành công cũng sẽ hiển thị thông báo thất bại
           self.showNotification("Xóa thất bại", "fail");
           self.deleteLink = "";
-          self.entity=""; 
+          self.entity = "";
         });
     });
   }
@@ -258,6 +273,7 @@ class BaseJS {
         let allInput = $("[inputField]");
         $(allInput).val(null);
         $("[inputField='EmployeeCode']").val(self.maxcode);
+        $("#txtSalary").val("(VND)");
       } catch (e) {
         console.log(e);
       }
@@ -312,12 +328,12 @@ class BaseJS {
             let value = $(input).attr("genderValue");
             entity[inputField] = value;
           }
-        } else if ($(input).attr("type") === "money") {
+        } else if ($(input).attr("data-type") === "money") {
           let inputField = $(input).attr("inputField");
           let value = $(input).val().trim();
           let lengh = value.length;
-          let money = value.substring(0,lengh-5);
-          entity[inputField] = money.split(',').join("");
+          let money = value.substring(0, lengh - 5);
+          entity[inputField] = money.split(",").join("");
         } else if ($(input).attr("type") === "select") {
           let selectField = $(input).attr("selectField");
           let option = $(this).find("option:selected");
@@ -370,7 +386,6 @@ class BaseJS {
 
               $(".include-content").hide();
               self.showNotification("Thêm khách hàng thành công", "success");
-              
             }
 
             // + load lại lại dữ liệu
@@ -379,17 +394,17 @@ class BaseJS {
           .fail(function (e) {
             let error = "";
             let errorServer = e.responseJSON.Data;
-            $.each(errorServer, function (index, value) { 
-               error +=value;
+            $.each(errorServer, function (index, value) {
+              error += value;
             });
             if (self.method === "PUT") {
               // + đưa ra thông báo thất bại
               $(".loading").hide();
-              self.showNotification("Sửa thông tin thất bại."+error, "fail");
+              self.showNotification("Sửa thông tin thất bại." + error, "fail");
             } else if (self.method === "POST") {
               // + đưa ra thông báo thất bại
               $(".loading").hide();
-              self.showNotification("Thêm khách thất bại."+error, "fail");
+              self.showNotification("Thêm khách thất bại." + error, "fail");
             }
 
             //console.log(e.Data);
@@ -433,7 +448,7 @@ class BaseJS {
                 $(input).datepicker({ format: "dd/mm/yyyy" });
                 $(input).datepicker("setDate", day);
               }
-            } else if ($(input).attr("type") === "money") {
+            } else if ($(input).attr("data-type") === "money") {
               let inputField = $(input).attr("inputField");
               let value = res[inputField];
               $(input).val(self.formatMoney(value.toString()) + "(VND)   ");
@@ -529,7 +544,7 @@ class BaseJS {
    * @param {string} data : data là giá trị cần định dạng tiền tệ
    */
   formatMoney(data) {
-    if (data){
+    if (data) {
       return data.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     } // 12,345.67
     else {
@@ -566,7 +581,7 @@ class BaseJS {
             var typeFormat = $(val).attr("formatType");
             var text_align = $(val).attr("class");
             var data = value[fieldName];
-            if (data!=null) {
+            if (data != null) {
               if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
                 data = self.formatDate(data, typeFormat);
               } else if (typeFormat === "money") {

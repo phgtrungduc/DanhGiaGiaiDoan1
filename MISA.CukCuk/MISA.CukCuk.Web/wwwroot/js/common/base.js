@@ -441,7 +441,7 @@ class BaseJS {
               //Các trường nào quyết định sẽ hiển thị theo kiểu radio sẽ handle bên trong này
               //Trong trường hợp này chỉ có Gender muốn hiển thị theo kiểu radio nên chỉ bắt sự kiện
               //inputField là Gender
-            } else if ($(input).attr("type") == "datepicker") {
+            } else if ($(input).attr("type") === "datepicker") {
               let inputField = $(input).attr("inputField");
               if (res[inputField]) {
                 let day = new Date(res[inputField]);
@@ -451,7 +451,10 @@ class BaseJS {
             } else if ($(input).attr("data-type") === "money") {
               let inputField = $(input).attr("inputField");
               let value = res[inputField];
-              $(input).val(self.formatMoney(value.toString()) + "(VND)   ");
+              if (value){
+                $(input).val(self.formatMoney(value.toString()) + "(VND)   ");
+              }
+              
             } else if ($(input).attr("type") === "select") {
               let selectField = $(input).attr("selectField");
               let allOptions = $(this).find("option");
@@ -459,7 +462,7 @@ class BaseJS {
               $.each(allOptions, function (index, value) {
                 let valueOfSelect = $(value).attr(selectField + "Value");
                 let valueFromRes = res[resField];
-                if (valueOfSelect.localeCompare(valueFromRes) === 0) {
+                if (valueOfSelect&&valueOfSelect.localeCompare(valueFromRes) === 0) {
                   $(value).prop("selected", true);
                 } else {
                   $(value).prop("selected", false);
@@ -517,7 +520,8 @@ class BaseJS {
    */
 
   formatDate(data, type) {
-    let date = new Date(data);
+    if (data){
+      let date = new Date(data);
     let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     let month =
       date.getMonth() + 1 < 10
@@ -537,6 +541,7 @@ class BaseJS {
       default:
         return "";
     }
+    }else return "";
   }
 
   /**
@@ -581,7 +586,7 @@ class BaseJS {
             var typeFormat = $(val).attr("formatType");
             var text_align = $(val).attr("class");
             var data = value[fieldName];
-            if (data != null) {
+            if (data != null&&data!=undefined) {
               if (typeFormat === "ddmmyyyy" || typeFormat === "mmddyyyy") {
                 data = self.formatDate(data, typeFormat);
               } else if (typeFormat === "money") {
